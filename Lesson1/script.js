@@ -73,3 +73,8 @@ people.map((person) => {
     person.pets.push("bird");
 });
 console.log(people);
+
+const array = Array(10).fill(42);
+array.splice(5, 0, "answer");
+console.log(array);
+console.log(array.find((el) => el === "answer"));
