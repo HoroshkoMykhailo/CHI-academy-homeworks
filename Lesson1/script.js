@@ -30,3 +30,41 @@ do {
     console.log(typeof someArray[i]);
     i++;
 } while(i < arrayLength)
+
+const people = [
+    {
+        name: "John",
+        age: 30,
+        pets: ["cat", "dog"],
+    },
+    {
+        name: "Pete",
+        age: 34,
+        pets: ["cat", "dog", "fish"],
+    },
+    {
+        name: "Mary",
+        age: 18,
+        pets: [],
+    },
+    {
+        name: "Bob",
+        age: 15,
+        pets: ["fish", "cat", "dog"],
+    },
+    {
+        name: "Alice",
+        age: 31,
+        pets: ["cat"],
+    },
+    {
+        name: "Jack",
+        age: 16,
+        pets: [],
+    },
+];
+
+const filteredPeople = people.filter((person) => {
+    return person.age > 20;
+});
+console.log(filteredPeople);
