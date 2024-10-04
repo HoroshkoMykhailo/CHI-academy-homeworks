@@ -76,5 +76,21 @@ console.log(people);
 
 const array = Array(10).fill(42);
 array.splice(5, 0, "answer");
-console.log(array);
 console.log(array.find((el) => el === "answer"));
+
+const someObject = {
+    name: "John",
+    age: 30,
+    pets: ["cat", "dog"],
+};
+
+Object.keys(someObject).forEach((key) => {
+    const verb = (key === "pets" && someObject[key].length > 1) ? "are" : "is";
+    console.log("My", key, verb, someObject[key]);
+});
+
+if(Object.hasOwn(someObject, "name")) {
+    console.log("Object has name");
+}
+const objectAsArray = Object.values(someObject);
+console.log("Value of second property of object", objectAsArray[1]);
