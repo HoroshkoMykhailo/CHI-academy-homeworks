@@ -68,3 +68,8 @@ const filteredPeople = people.filter((person) => {
     return person.age > 20;
 });
 console.log(filteredPeople);
+
+people.map((person) => {
+    person.pets.push("bird");
+});
+console.log(people);
