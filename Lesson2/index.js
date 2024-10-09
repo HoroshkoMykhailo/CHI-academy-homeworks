@@ -17,3 +17,19 @@ console.log(otherResult);
 const sendOtherData = addParamsToRequest({'access-token': '12345', 'user-id': '123'});
 const otherDataResult = sendOtherData({'data': 'someData', 'otherData': 'someOtherData'});
 console.log(otherDataResult);
+
+
+const obj = {
+    getData: function () {
+        console.log(`Person name is: ${this.name} and age ${this.age}`)
+    }
+}
+
+obj.getData.call({name: 'John', age: 30});
+
+function showPerson(name, age) {
+    const person = {name, age};
+    obj.getData.call(person);
+}
+
+showPerson('Alex', 25);
