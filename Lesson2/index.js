@@ -81,3 +81,78 @@ function findFilesRecursively(obj) {
 
 findFilesRecursively(root);
 console.log(files);
+
+
+class Person {
+    constructor(name, phone) {
+        this.name = name;
+        this.phone = phone;
+    }
+    introduce() {
+        console.log(`Привіт, мене звати ${this.name}, мій номер ${this.phone}.`)
+    }
+}
+
+class Student extends Person {
+    constructor(name, phone, course) {
+        super(name, phone);
+        this.course = course;
+    }
+    study() {
+        console.log(`Я навчаюся на ${this.course} курсі.`);
+    }
+}
+
+class Teacher extends Person {
+    constructor(name, phone, subject) {
+        super(name, phone);
+        this.subject = subject;
+    }
+    teach() {
+        console.log(`Я викладаю ${this.subject}.`);
+    }
+}
+
+const student = new Student('Олександр', '+380111111111', 1);
+student.introduce();
+student.study();
+
+const teacher = new Teacher('Василь', '+380123456789', 'Математика');
+teacher.introduce();
+teacher.teach();
+
+function PersonOldStyle(name, phone) {
+    this.name = name;
+    this.phone = phone;
+}
+PersonOldStyle.prototype.introduce = function() {
+    console.log(`Привіт, мене звати ${this.name}, мій номер ${this.phone}.`)
+}
+
+function StudentOldStyle(name, phone, course) {
+    PersonOldStyle.call(this, name, phone);
+    this.course = course;
+}
+StudentOldStyle.prototype = Object.create(PersonOldStyle.prototype);
+StudentOldStyle.prototype.constructor = StudentOldStyle;
+StudentOldStyle.prototype.study = function() {
+    console.log(`Я навчаюся на ${this.course} курсі.`);
+}
+
+function TeacherOldStyle(name, phone, subject) {
+    PersonOldStyle.call(this, name, phone);
+    this.subject = subject;
+}
+TeacherOldStyle.prototype = Object.create(PersonOldStyle.prototype);
+TeacherOldStyle.prototype.constructor = TeacherOldStyle;
+TeacherOldStyle.prototype.teach = function() {
+    console.log(`Я викладаю ${this.subject}.`);
+}
+
+const studentOldStyle = new StudentOldStyle('Олександр', '+380111111111', 1);
+studentOldStyle.introduce();
+studentOldStyle.study();
+
+const teacherOldStyle = new TeacherOldStyle('Василь', '+380123456789', 'Математика');
+teacherOldStyle.introduce();
+teacherOldStyle.teach();
