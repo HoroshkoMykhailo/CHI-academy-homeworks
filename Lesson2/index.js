@@ -25,15 +25,16 @@ const obj = {
     }
 }
 
-obj.getData.call({name: 'John', age: 30});
-
-function showPerson(name, age) {
-    const person = {name, age};
-    obj.getData.call(person);
+const person = {
+    name: 'John',
+    age: 30
 }
 
-showPerson('Alex', 25);
+obj.getData.call(person);
 
+const showPerson = obj.getData.bind(person);
+
+showPerson();
 
 const root = {
     name: 'name',
