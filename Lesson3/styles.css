@@ -32,10 +32,6 @@
     font-weight: bold;
 }
 
-.alive {
-    color: gray;
-}
-
 .controllers {
     display: flex;
     justify-content: space-around;

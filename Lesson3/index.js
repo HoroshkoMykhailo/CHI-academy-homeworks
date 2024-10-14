@@ -1,94 +1,55 @@
 async function getData(url) {
     const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const data = await response.json();
     return data;
 }
 
 async function handleData(url = 'https://rickandmortyapi.com/api/character') {
-    const data = await getData(url);
-    showData(data);
+    showData(await getData(url));
 }
 
 function showData(data) {
     const root = document.querySelector('.container');
     const loading = document.querySelector('.loading');
     root.innerHTML = '';
-
     root.style.display = 'none';
     loading.style.display = 'block';
 
-    data.results.forEach(character => {
-        showCharacter(root, character);
-    });
-
+    data.results.forEach(character => showCharacter(root, character));
     loading.style.display = 'none';
     root.style.display = 'grid';
     
     showPageNumber(data);
-
     setupPagination(data);
 }
 
-function showCharacter(root, character) {
+function showCharacter(root, { image, name, status }) {
     const div = document.createElement('div');
     div.className = 'character';
+    
+    const statusColor = status === 'Alive' ? 'limegreen' : status === 'Dead' ? 'red' : 'gray';
 
-    const img = document.createElement('img');
-    img.src = character.image;
-    div.appendChild(img);
-
-    const name = document.createElement('p');
-    name.className = 'name';
-    name.textContent = character.name;
-    div.appendChild(name);
-
-    const ifAlive = document.createElement('p');
-    ifAlive.className = 'alive';
-    ifAlive.textContent = character.status;
-    if(character.status === 'Alive') {
-        ifAlive.style.color = 'limegreen';
-    }
-    else if(character.status === 'Dead') {
-        ifAlive.style.color = 'red';
-    }
-    div.appendChild(ifAlive);
+    div.innerHTML = `
+        <img src="${image}">
+        <p class="name">${name}</p>
+        <p class="alive" style="color: ${statusColor}">${status}</p>
+    `;
 
     root.appendChild(div);
 }
 
-function showPageNumber(data) {
+function showPageNumber( { info }) {
     const pageNumber = document.getElementById('pageNumber');
-    if(data.info.next){
-        const urlObj = new URL(data.info.next);
-        const params = new URLSearchParams(urlObj.search);
-        const page = params.get('page');
-        pageNumber.textContent = page - 1;
-    }
-    else{
-        pageNumber.textContent = data.info.pages;
-    }
+    const page = info.next ? new URL(info.next).searchParams.get('page') : undefined;
+    pageNumber.textContent = page ? page - 1 : info.pages;
 }
 
-function setupPagination(data) {
-    const prevButton = document.getElementById('prev');
-    const nextButton = document.getElementById('next');
-
-    prevButton.onclick = null;
-    nextButton.onclick = null;
-
-    if (data.info.prev) {
-        prevButton.disabled = false;
-        prevButton.onclick = () => handleData(data.info.prev);
-    } else {
-        prevButton.disabled = true; 
-    }
-
-    if (data.info.next) {
-        nextButton.disabled = false;
-        nextButton.onclick = () => handleData(data.info.next);
-    } else {
-        nextButton.disabled = true;
-    }
+function setupPagination({ info}) {
+    document.getElementById('prev').onclick = info.prev ? () => handleData(info.prev) : null;
+    document.getElementById('prev').disabled = !info.prev;
+    document.getElementById('next').onclick = info.next ? () => handleData(info.next) : null;
+    document.getElementById('next').disabled = !info.next;
 }
 
 handleData();
