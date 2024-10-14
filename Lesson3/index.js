@@ -32,6 +32,12 @@ function showCharacter(root, character) {
     const ifAlive = document.createElement('p');
     ifAlive.className = 'alive';
     ifAlive.textContent = character.status;
+    if(character.status === 'Alive') {
+        ifAlive.style.color = 'limegreen';
+    }
+    else if(character.status === 'Dead') {
+        ifAlive.style.color = 'red';
+    }
     div.appendChild(ifAlive);
 
     root.appendChild(div);

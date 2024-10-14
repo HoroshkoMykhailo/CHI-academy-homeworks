@@ -35,3 +35,17 @@
 .alive {
     color: gray;
 }
+
+.controllers {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+button {
+    width: 100px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
