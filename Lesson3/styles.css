@@ -42,6 +42,10 @@
     align-items: center;
 }
 
+.page {
+    font-size: large;
+}
+
 button {
     width: 100px;
     padding: 5px 10px;
