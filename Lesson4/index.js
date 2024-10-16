@@ -44,6 +44,7 @@ const showModal = async (url) => {
         <p class="name">${characterData.name}</p>
     `;
     modal.style.display = 'flex';
+    modalClose.onclick = () => modal.style.display = 'none';
 };
 
 const showCharacter = ({ image, name, status, id }) => {
@@ -64,10 +65,6 @@ root.addEventListener('click', (event) => {
     const index = character.getAttribute('data-index');
     const url = `https://rickandmortyapi.com/api/character/${index}`;
     showModal(url);
-});
-
-modalClose.addEventListener('click', () => {
-    modal.style.display = 'none';
 });
 
 window.addEventListener('click', (event) => {
