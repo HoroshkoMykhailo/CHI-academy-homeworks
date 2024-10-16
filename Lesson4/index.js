@@ -28,7 +28,7 @@ const showData = async (url = 'https://rickandmortyapi.com/api/character')  => {
     root.style.display = 'grid';
 };
 
-const addData = async(url) => {
+const addData = async (url) => {
     isLoading = true;
     const data = await getData(url);
     const charactersHtml = data.results.map(character => showCharacter(character)).join('');
