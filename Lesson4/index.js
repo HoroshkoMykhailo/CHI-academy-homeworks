@@ -4,6 +4,9 @@ const modal = document.querySelector('.modal');
 const modalContent = document.querySelector('.modal-content');
 const modalClose = document.querySelector('.close');
 
+let nextPage = 'https://rickandmortyapi.com/api/character';
+let isLoading = false;
+
 const getData = async (url) => {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -12,19 +15,26 @@ const getData = async (url) => {
 };
 
 const showData = async (url = 'https://rickandmortyapi.com/api/character')  => {
-    const data = await getData(url);
-    root.innerHTML = '';
     root.style.display = 'none';
     loading.style.display = 'block';
 
-    addData(data);
+    await addData(url);
+
+    if (document.documentElement.scrollHeight <= window.innerHeight){
+        await addData(nextPage);
+    }
+
     loading.style.display = 'none';
     root.style.display = 'grid';
 };
 
-const addData = ({ results }) => {
-    const charactersHtml = results.map(character => showCharacter(character)).join('');
+const addData = async(url) => {
+    isLoading = true;
+    const data = await getData(url);
+    const charactersHtml = data.results.map(character => showCharacter(character)).join('');
     root.innerHTML += charactersHtml;
+    nextPage = data.info.next;
+    isLoading = false;
 };
 
 const showModal = async (url) => {
@@ -63,6 +73,12 @@ modalClose.addEventListener('click', () => {
 window.addEventListener('click', (event) => {
     if (event.target === modal) {
         modal.style.display = 'none';
+    }
+});
+
+window.addEventListener('scroll', () => {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200&& !isLoading) {
+        addData(nextPage);
     }
 });
 
