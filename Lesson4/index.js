@@ -1,3 +1,6 @@
+const root = document.querySelector('.container');
+const loading = document.querySelector('.loading');
+
 async function getData(url) {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -10,8 +13,6 @@ async function handleData(url = 'https://rickandmortyapi.com/api/character') {
 }
 
 function showData(data) {
-    const root = document.querySelector('.container');
-    const loading = document.querySelector('.loading');
     root.innerHTML = '';
     root.style.display = 'none';
     loading.style.display = 'block';
@@ -37,19 +38,6 @@ function showCharacter(root, { image, name, status }) {
     `;
 
     root.appendChild(div);
-}
-
-function showPageNumber( { info }) {
-    const pageNumber = document.getElementById('pageNumber');
-    const page = info.next ? new URL(info.next).searchParams.get('page') : undefined;
-    pageNumber.textContent = page ? page - 1 : info.pages;
-}
-
-function setupPagination({ info }) {
-    document.getElementById('prev').onclick = info.prev ? () => handleData(info.prev) : null;
-    document.getElementById('prev').disabled = !info.prev;
-    document.getElementById('next').onclick = info.next ? () => handleData(info.next) : null;
-    document.getElementById('next').disabled = !info.next;
 }
 
 handleData();
