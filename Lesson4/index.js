@@ -74,7 +74,7 @@ window.addEventListener('click', (event) => {
 });
 
 window.addEventListener('scroll', () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200&& !isLoading) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200 && nextPage && !isLoading) {
         addData(nextPage);
     }
 });
