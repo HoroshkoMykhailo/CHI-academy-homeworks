@@ -10,6 +10,7 @@ module.exports = (argv) => {
     output: {
       path: path.resolve(__dirname, "dist"),
       filename: "bundle.[contenthash].js",
+      publicPath: "/",
     },
     mode: isProduction ? "production" : "development",
     devtool: isProduction ? "source-map" : "eval-source-map",
@@ -41,6 +42,7 @@ module.exports = (argv) => {
       new CleanWebpackPlugin(),
     ],
     devServer: {
+      historyApiFallback: true,
       static: path.join(__dirname, "dist"),
       compress: true,
       port: 8000,
