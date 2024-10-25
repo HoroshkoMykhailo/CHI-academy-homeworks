@@ -1,40 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { heroesColumns, sidebarWidth } from "../../constants/constants";
+import { useFetchHeroes } from "../../hooks/useFetchHeroes";
 
 const Heroes = () => {
-  const [heroes, setHeroes] = useState([]);
-
-  useEffect(() => {
-    const fetchHeroes = async () => {
-      const response = await fetch("https://rickandmortyapi.com/api/character");
-      const data = await response.json();
-      const heroesData = data.results.map(hero => ({
-        id: hero.id,
-        name: hero.name,
-        status: hero.status,
-      }));
-      setHeroes(heroesData);
-    };
-
-    fetchHeroes();
-  }, []);
+  const { heroes, totalCount, paginationModel, setPaginationModel } = useFetchHeroes();
 
   return (
     <>
-      <Box sx={{ height: "100vh", maxWidth: `calc(100vw - ${sidebarWidth}px)`, overflow: "hidden" }}>
+      <Box sx={{ height: "100vh", maxWidth: `calc(100vw - ${sidebarWidth}px)` }}>
         <DataGrid
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 20,
-              },
-            },
-          }}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
           rows={heroes}
           columns={heroesColumns}
+          paginationMode="server"
+          rowCount={totalCount}
         />
       </Box>
       <Outlet />
