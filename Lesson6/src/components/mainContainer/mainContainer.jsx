@@ -7,6 +7,7 @@ const MainContainer = ({ children, backgroundImage, backgroundSize = "cover", ba
         sx={{
           minHeight: "100vh",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
