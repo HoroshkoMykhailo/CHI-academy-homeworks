@@ -2,13 +2,13 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home, Heroes, About, NotFound } from './layouts/layouts';
 import { Hero, Sidebar } from './components/components';
-import { sidebarWidth, AppRoute } from './constants/constants';
+import { AppRoute } from './constants/constants';
 
 const App = () => {
   return (
     <>
       <Router>
-        <Sidebar width={sidebarWidth} />
+        <Sidebar />
         <div className="app-container">
           <Routes>
             <Route path={AppRoute.HOME} element={<Home />} />

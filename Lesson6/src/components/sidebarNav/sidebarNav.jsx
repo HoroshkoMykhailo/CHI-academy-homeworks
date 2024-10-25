@@ -1,16 +1,25 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
+import { useState } from 'react';
+import { Drawer, List, ListItemText, ListItemIcon, ListItemButton, Switch, Box } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import InfoIcon from '@mui/icons-material/Info';
 import { Link } from 'react-router-dom';
+import { sidebarWidth } from '../../constants/sidebarWidth';
+import { ThemeSwitch } from '../components';
 
-const Sidebar = ({width}) => {
+const Sidebar = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const handleToggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+  
   return (
     <Drawer
       variant="permanent"
       anchor="left"
-      sx={{ width: width, flexShrink: 0, [`& .MuiDrawer-paper`]: { width: width, boxSizing: 'border-box' } }}
+      sx={{ width: sidebarWidth, flexShrink: 0, [`& .MuiDrawer-paper`]: { width: sidebarWidth, boxSizing: 'border-box' } }}
     >
       <List>
         <ListItemButton component={Link} to="/">
@@ -26,6 +35,10 @@ const Sidebar = ({width}) => {
           <ListItemText primary="About" />
         </ListItemButton>
       </List>
+
+      <Box sx={{ mt: 'auto', p: 2 }}>
+        <ThemeSwitch checked={isDarkMode} onChange={handleToggleDarkMode} />
+      </Box>
     </Drawer>
   );
 };
