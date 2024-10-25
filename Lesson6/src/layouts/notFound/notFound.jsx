@@ -1,8 +1,11 @@
 import React from "react";
 import { Typography, Button} from "@mui/material";
 import { MainContainer } from "../../components/components";
+import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../constants/constants";
 
 const NotFound = () => {
+  const navigate = useNavigate();
     return (
       <MainContainer
         backgroundImage="https://m.media-amazon.com/images/M/MV5BZmZhNWMyODgtMzA0OC00NWFhLTllODQtYmJkZjYxYWU4MGU1XkEyXkFqcGdeQWFybm8@._V1_.jpg"
@@ -50,9 +53,9 @@ const NotFound = () => {
             fontSize: "1.5rem",
             '&:hover': { backgroundColor: "#FF7844" }, 
           }}
-          onClick={() => window.history.back()}
+          onClick={() => navigate(`${AppRoute.HOME}`)}
         >
-          Go Back
+          Go Home
         </Button>
       </MainContainer>
     );

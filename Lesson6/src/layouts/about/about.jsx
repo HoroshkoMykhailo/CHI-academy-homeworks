@@ -23,7 +23,10 @@ const About = () => {
             color: "white",
           }}
         >
-          This library is a collection of characters from the popular animated series "Rick and Morty". Explore detailed profiles, species, and status of your favorite heroes and villains from across the multiverse.
+          This library is a collection of characters from the popular animated
+          series "Rick and Morty". Explore detailed profiles, species, and
+          status of your favorite heroes and villains from across the
+          multiverse.
         </Typography>
         <Typography
           variant="h6"

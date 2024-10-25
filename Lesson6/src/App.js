@@ -15,7 +15,7 @@ const App = () => {
             <Route path={AppRoute.HEROES} element={<Heroes />}>
               <Route
                 path={AppRoute.HERO}
-                element={<Hero hero={{ name: "Spiderman" }} />}
+                element={<Hero/>}
               />
             </Route>
             <Route path={AppRoute.ABOUT} element={<About />} />

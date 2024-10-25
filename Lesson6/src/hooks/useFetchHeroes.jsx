@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ApiUrl } from "../constants/constants";
 
 const useFetchHeroes = () => {
   const [heroes, setHeroes] = useState([]);
@@ -7,19 +8,22 @@ const useFetchHeroes = () => {
     page: 0,
     pageSize: 20,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchHeroes = async () => {
-      const response = await fetch(`https://rickandmortyapi.com/api/character?page=${paginationModel.page + 1}`);
+      setIsLoading(true);
+      const response = await fetch(`${ApiUrl}?page=${paginationModel.page + 1}`);
       const data = await response.json();
       setHeroes(data.results);
       setTotalCount(data.info.count);
+      setIsLoading(false);
     };
 
     fetchHeroes();
   }, [paginationModel]);
 
-  return { heroes, totalCount, paginationModel, setPaginationModel };
+  return { heroes, totalCount, paginationModel, setPaginationModel, isLoading };
 };
 
 export { useFetchHeroes };
