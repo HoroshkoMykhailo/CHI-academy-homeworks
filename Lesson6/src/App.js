@@ -1,10 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home, Heroes, About, NotFound } from './layouts/layouts';
-import { Hero } from './components/hero/hero';
-import Sidebar from './components/sidebarNav/sidebarNav';
-import { sidebarWidth } from './constants/sidebarWidth';
-import AppRoute from './constants/appRoutes';
+import { Hero, Sidebar } from './components/components';
+import { sidebarWidth, AppRoute } from './constants/constants';
 
 const App = () => {
   return (

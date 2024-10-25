@@ -30,4 +30,4 @@ const Sidebar = ({width}) => {
   );
 };
 
-export default Sidebar;
+export { Sidebar };

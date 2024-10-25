@@ -53,3 +53,7 @@ button {
 #root {
     display: flex;
 }
+
+.app-container {
+    width: 100%;
+}

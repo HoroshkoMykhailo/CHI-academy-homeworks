@@ -6,4 +6,4 @@ const AppRoute = {
     ABOUT: '/about',
 };
 
-export default AppRoute;
+export { AppRoute };
