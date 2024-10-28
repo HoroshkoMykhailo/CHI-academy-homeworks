@@ -2,23 +2,25 @@ import React from "react";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const HomeButton = () => {
+const CustomButton = ({ to, text, sx, fullWidth = false }) => {
   return (
     <Button
       component={Link}
-      to="/heroes"
+      to={to}
       variant="contained"
       color="warning"
       size="large"
+      fullWidth={fullWidth}
       sx={{
         mt: 4,
         padding: "10px 20px",
         fontSize: "1.2rem",
+        ...sx, 
       }}
     >
-      Go to Heroes
+      {text}
     </Button>
   );
 };
 
-export default HomeButton;
+export { CustomButton };

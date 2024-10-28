@@ -2,7 +2,7 @@ import React from "react";
 import { MainContainer } from "../../components/components";
 import HomeHeader from "./сomponents/homeHeader";
 import HomeDescription from "./сomponents/homeDescription";
-import HomeButton from "./сomponents/homeButton";
+import { CustomButton } from "../../components/components";
 import { Container } from "@mui/material";
 
 const Home = () => {
@@ -13,7 +13,7 @@ const Home = () => {
       <Container maxWidth="md" sx={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.6)", borderRadius: 4, p: 4 }}>
         <HomeHeader />
         <HomeDescription />
-        <HomeButton />
+        <CustomButton to="/heroes" text="Go to Heroes" />
       </Container>
     </MainContainer>
   );
