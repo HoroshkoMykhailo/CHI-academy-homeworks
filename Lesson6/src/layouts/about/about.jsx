@@ -8,7 +8,7 @@ import DeveloperInfo from "./components/developerInfo";
 const About = () => {
   return (
     <MainContainer >
-      <Container maxWidth="md" sx={{ color: "black", borderRadius: 4, p: 4 }}>
+      <Container maxWidth="md" sx={{ p: 4 }}>
         <AboutHeader />
         <AboutDescription />
         <DeveloperInfo />

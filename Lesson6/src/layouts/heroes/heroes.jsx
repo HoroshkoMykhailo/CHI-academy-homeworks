@@ -26,6 +26,7 @@ const Heroes = () => {
           paginationMode="server"
           rowCount={totalCount}
           onRowClick={handleRowClick}
+          sx={{ borderRadius: 0 }}
         />
       </Box>
       <Outlet />

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 
-const MainContainer = ({ children, backgroundImage, backgroundSize = "cover", backgroundPosition = "center", color="white" }) => {
+const MainContainer = ({ children, backgroundImage, backgroundSize = "cover", backgroundPosition = "center" }) => {
     return (
       <Box
         sx={{
@@ -11,7 +11,6 @@ const MainContainer = ({ children, backgroundImage, backgroundSize = "cover", ba
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          backgroundColor: color,
           backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
           backgroundSize: backgroundSize,
           backgroundPosition: backgroundPosition,

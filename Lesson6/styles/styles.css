@@ -3,45 +3,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-.container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
-    padding: 10px;
-}
-
-.character {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    text-align: center;
-    padding-top: 10px;
-}
-
-.character img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-}
-
-.character p {
-    margin: 5px 0;
-}
-
-.name {
-    font-weight: bold;
-}
-
-.controllers {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.page {
-    font-size: large;
-}
-
 #root {
     display: flex;
 }
