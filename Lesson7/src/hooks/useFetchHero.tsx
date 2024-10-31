@@ -1,27 +1,19 @@
-import { useState, useEffect } from "react";
+import { useRequest } from "ahooks";
 import { useNavigate } from "react-router-dom";
-import { AppRoute, ApiUrl } from "../constants/constants";
+import { AppRoute } from "../constants/constants";
+import { fetchHeroById } from "../api/heroApi";
 import { Hero } from "../models/hero";
 
 const useFetchHero = (id: string): Hero | null => {
-    const navigate = useNavigate();
-    const [hero, setHero] = useState<Hero | null>(null);
-  
-    useEffect(() => {
-      const fetchHero = async () => {
-        const response = await fetch(`${ApiUrl}/${id}`);
-        if (!response.ok) {
-          navigate(`${AppRoute.NOT_FOUND}`);
-          return;
-        }
-        const data = await response.json();
-        setHero(data);
-      };
-  
-      fetchHero();
-    }, [id, navigate]);
-  
-    return hero;
+  const navigate = useNavigate();
+
+  const { data: hero } = useRequest(() => fetchHeroById(id), {
+    onError: () => {
+      navigate(`${AppRoute.NOT_FOUND}`);
+    },
+  });
+
+  return hero ?? null;
 };
-  
+
 export { useFetchHero };

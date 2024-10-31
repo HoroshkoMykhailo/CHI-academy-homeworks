@@ -1,5 +1,6 @@
+import { useRequest } from "ahooks";
 import { useEffect, useState } from "react";
-import { ApiUrl } from "../constants/constants";
+import { fetchHeroes } from "../api/heroesApi";
 import { Hero } from "../models/hero";
 
 interface PaginationModel {
@@ -7,37 +8,27 @@ interface PaginationModel {
   pageSize: number;
 }
 
-interface ApiResponse {
-  info: {
-    count: number;
-    pages: number;
-  };
-  results: Hero[];
-}
-
 const useFetchHeroes = () => {
-  const [heroes, setHeroes] = useState<Hero[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [paginationModel, setPaginationModel] = useState<PaginationModel>({
     page: 0,
     pageSize: 20,
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const { data, error, loading, run } = useRequest(() => fetchHeroes(paginationModel.page + 1), {
+    manual: true,
+    onSuccess: (result) => {
+      setTotalCount(result.info.count);
+    },
+  });
 
   useEffect(() => {
-    const fetchHeroes = async () => {
-      setIsLoading(true);
-      const response = await fetch(`${ApiUrl}?page=${paginationModel.page + 1}`);
-      const data: ApiResponse = await response.json();
-      setHeroes(data.results);
-      setTotalCount(data.info.count);
-      setIsLoading(false);
-    };
+    run();
+  }, [paginationModel])
 
-    fetchHeroes();
-  }, [paginationModel]);
+  const heroes: Hero[] = data?.results ?? [];
 
-  return { heroes, totalCount, paginationModel, setPaginationModel, isLoading };
+  return { heroes, totalCount, paginationModel, setPaginationModel, isLoading: loading, error };
 };
 
 export { useFetchHeroes };
