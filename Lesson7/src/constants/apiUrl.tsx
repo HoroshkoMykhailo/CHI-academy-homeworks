@@ -1,0 +1,1 @@
+export const ApiUrl: string = 'https://rickandmortyapi.com/api/character';
