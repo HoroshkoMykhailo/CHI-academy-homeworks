@@ -1,7 +1,7 @@
 {
-  "name": "lesson7",
+  "name": "lesson8",
   "version": "1.0.0",
-  "description": "Homework for lesson7",
+  "description": "Homework for lesson8",
   "main": "index.tsx",
   "scripts": {
     "serve": "webpack serve --mode development",
@@ -16,10 +16,12 @@
     "@mui/x-data-grid": "^7.21.0",
     "ahooks": "^3.8.1",
     "axios": "^1.7.7",
+    "history": "^5.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0",
-    "ts-loader": "^9.5.1"
+    "ts-loader": "^9.5.1",
+    "tsconfig-paths-webpack-plugin": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.8",
