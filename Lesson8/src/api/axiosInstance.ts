@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { history } from '~/utils/utils';
+import { AppRoute } from '~/constants/constants';
 
 const axiosInstance = axios.create({
   baseURL: 'http://ec2-13-49-67-34.eu-north-1.compute.amazonaws.com',
@@ -26,7 +26,7 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
 
       localStorage.removeItem('token');
-      history.push('/login');
+      window.location.replace(AppRoute.LOGIN);
     }
     return Promise.reject(error);
   }

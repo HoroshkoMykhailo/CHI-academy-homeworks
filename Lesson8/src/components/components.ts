@@ -6,3 +6,4 @@ export { ControlBar } from "./controlBar/controlBar";
 export { CommentStripe } from "./commentStripe/commentStripe";
 export { RegisterForm } from "./registerForm/registerForm";
 export { LoginForm } from "./loginForm/loginForm";
+export { CustomButton } from "./customButton/customButton";

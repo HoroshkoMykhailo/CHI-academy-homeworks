@@ -1,0 +1,6 @@
+.controlContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 1;
+}
