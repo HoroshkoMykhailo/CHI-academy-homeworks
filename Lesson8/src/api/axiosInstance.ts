@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { AppRoute } from '~/constants/constants';
+import { AppRoute, BackendUrl } from '~/constants/constants';
+import { HTTPCode } from '~/constants/constants';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://ec2-13-49-67-34.eu-north-1.compute.amazonaws.com',
+  baseURL: BackendUrl,
   timeout: 10000,
 });
 
@@ -23,7 +24,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error.response.status === HTTPCode.UNAUTHORIZED) {
 
       localStorage.removeItem('token');
       window.location.replace(AppRoute.LOGIN);

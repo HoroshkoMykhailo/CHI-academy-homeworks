@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Button, TextField, Box } from '@mui/material';
-import { AppRoute } from '~/constants/constants';
+import { AppRoute, HeaderHeight } from '~/constants/constants';
 import './controlBar.css';
 import { CustomButton } from '~/components/components';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +26,7 @@ const ControlBar: React.FC<ControlBarProps> = ({
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#5DD39E' }}>
+    <AppBar position="static" sx={{ backgroundColor: '#5DD39E', height: HeaderHeight }}>
       <Toolbar>
         <Box className="controlContainer">
         {isAuthenticated ? (
