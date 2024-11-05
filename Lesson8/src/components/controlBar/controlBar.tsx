@@ -25,39 +25,25 @@ const ControlBar: React.FC<ControlBarProps> = ({
     navigate(AppRoute.NEW_POST);
   };
 
+  const handleMyPosts = () => {
+    navigate(AppRoute.HOME);
+  };
+
   return (
     <AppBar position="static" sx={{ backgroundColor: '#5DD39E', height: HeaderHeight }}>
       <Toolbar>
         <Box className="controlContainer">
         {isAuthenticated ? (
           <>
-            <CustomButton width={120} onClick={handleNewPost} fontSize={"2rem"}>
-              +
-            </CustomButton>
-            <TextField
-              variant="outlined"
-              placeholder="Search..."
-              size="small"
-              sx={{
-                width: '500px',
-                backgroundColor: '#F7EDF0',
-                borderRadius: 1,
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "#313638",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "#313638",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "#2E7D32",
-                  },
-                },
-              }}
-            />
             <CustomButton width={120} onClick={onLogout}>
               Logout
             </CustomButton >
+            <CustomButton width={220} onClick={handleMyPosts}>
+              My posts
+            </CustomButton>
+            <CustomButton width={120} onClick={handleNewPost} fontSize={"2rem"}>
+              +
+            </CustomButton>
           </>
         ) : (
           <CustomButton width={120} onClick={handleLogin}>

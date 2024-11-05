@@ -1,7 +1,7 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
-import { Exhibit } from "~/api/exhibitActions";
 import { BackendUrl } from "~/constants/constants";
+import { Exhibit } from "~/types/types";
 
 const Post: React.FC<Exhibit> = (exhibit) => {
   return (

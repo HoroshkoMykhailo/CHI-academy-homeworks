@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchExhibits, fetchExhibitById, Exhibit } from '~/api/exhibitActions';
+import { fetchExhibits, fetchExhibitById } from '~/api/exhibitActions';
 import { DataStatus } from '~/constants/constants';
+import { Exhibit, ExhibitsResponse } from '~/types/types';
 import { type ValueOf } from '~/utils/utils';
 
-export const getExhibits = createAsyncThunk('exhibits/getAll', async () => {
-  return await fetchExhibits();
+export const getExhibits = createAsyncThunk('exhibits/getAll', async ({page, limit}: {page: number, limit: number}) => {
+  return await fetchExhibits(page, limit);
 });
 
 export const getExhibitById = createAsyncThunk('exhibits/getById', async (id: number) => {
@@ -14,11 +15,17 @@ export const getExhibitById = createAsyncThunk('exhibits/getById', async (id: nu
 interface ExhibitsState {
   exhibits: Exhibit[];
   dataStatus: ValueOf<typeof DataStatus>;
+  total: number;
+  page: number;
+  lastPage: number;
 }
 
 const initialState: ExhibitsState = {
   exhibits: [],
   dataStatus: DataStatus.IDLE,
+  total: 0,
+  page: 1,
+  lastPage: 1
 };
 
 const exhibitsSlice = createSlice({
@@ -32,9 +39,12 @@ const exhibitsSlice = createSlice({
       })
       .addCase(
         getExhibits.fulfilled,
-        (state, action: PayloadAction<Exhibit[]>) => {
+        (state, action: PayloadAction<ExhibitsResponse>) => {
           state.dataStatus = DataStatus.FULFILLED;
-          state.exhibits = action.payload;
+          state.exhibits = action.payload.data;
+          state.total = action.payload.total;
+          state.page = action.payload.page;
+          state.lastPage = action.payload.lastPage;
         }
       )
       .addCase(getExhibits.rejected, (state) => {

@@ -2,8 +2,8 @@ import { Box, CircularProgress, Container, Grid, Typography } from "@mui/materia
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ControlBar, Post } from "~/components/components";
-import { AppRoute, BackendUrl, HeaderHeight } from "~/constants/constants";
+import { ControlBar, Pagination, Post } from "~/components/components";
+import { AppRoute, HeaderHeight } from "~/constants/constants";
 import { getExhibits } from "~/store/slices/exhibitsSlice";
 import { AppDispatch, RootState } from "~/store/store";
 
@@ -11,41 +11,78 @@ const StripePage: React.FC = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const exhibits = useSelector((state: RootState) => state.exhibits.exhibits);
-  const dataStatus = useSelector(
-    (state: RootState) => state.exhibits.dataStatus
+  const { exhibits, dataStatus, lastPage } = useSelector(
+    (state: RootState) => state.exhibits
   );
 
-  useEffect(() => {
-    dispatch(getExhibits());
-  }, [dispatch]);
+  const [page, setPage] = React.useState(1);
+  const [limit] = React.useState(5);
 
-  if (dataStatus === "pending") return <CircularProgress />;
-  if (dataStatus === "rejected")
-    return <Typography color="error">Error loading exhibits.</Typography>;
+  useEffect(() => {
+    dispatch(getExhibits({ page, limit }));
+  }, [page, limit, dispatch]);
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
 
   return (
     <>
       <ControlBar
-        isAuthenticated={true}
+        isAuthenticated={false}
         onLogout={() => {
           navigate(AppRoute.LOGIN);
         }}
       />
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: `calc(100vh - ${HeaderHeight}px)`,
-          overflowY: 'auto',
-          pt: 2
+          display: "flex",
+          flexDirection: "column",
+          height: `calc(100vh - 2*${HeaderHeight}px)`,
+          overflowY: "auto",
+          pt: 2,
         }}
       >
-          {exhibits.map((exhibit) => (
-            <Box key={exhibit.id} mb={3} width="100%" display="flex" justifyContent="center">
+        {dataStatus === "pending" && (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <CircularProgress />
+          </Box>
+        )}
+        {dataStatus === "rejected" && (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <Typography color="error">Error loading exhibits.</Typography>
+          </Box>
+        )}
+        {dataStatus === "fulfilled" &&
+          exhibits.map((exhibit) => (
+            <Box
+              key={exhibit.id}
+              mb={3}
+              width="100%"
+              display="flex"
+              justifyContent="center"
+            >
               <Post {...exhibit} />
             </Box>
           ))}
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        pt={2}
+        height={HeaderHeight}
+        sx={{
+          backgroundColor: "#5DD39E",
+        }}
+      >
+        <Pagination
+          page={page}
+          lastPage={lastPage}
+          onChange={handlePageChange}
+        />
       </Box>
     </>
   );
