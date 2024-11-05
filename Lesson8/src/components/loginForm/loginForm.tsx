@@ -1,13 +1,22 @@
 import React from "react";
-
-const LoginForm: React.FC = () => {
-    return (
-        <form>
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <button type="submit">Login</button>
-        </form>
-    );
+import { FormComponent } from "~/components/components";
+import { useNavigate } from "react-router-dom";
+import { AppRoute } from "~/constants/constants";
+interface LoginFormProps {
+    onSubmit: (username: string, password: string) => void;
 }
 
-export { LoginForm }
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+    const navigate = useNavigate();
+  
+    return (
+      <FormComponent
+        buttonLabel="Login"
+        linkText="Don't have an account? Register"
+        onLinkClick={() => navigate(AppRoute.REGISTER)}
+        onSubmit={onSubmit}
+      />
+    );
+  };
+
+export { LoginForm };

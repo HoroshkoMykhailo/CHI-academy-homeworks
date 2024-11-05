@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ControlBar, Pagination, Post } from "~/components/components";
-import { AppRoute, HeaderHeight } from "~/constants/constants";
+import { AppRoute, Colors, HeaderHeight } from "~/constants/constants";
 import { getExhibits } from "~/store/slices/exhibitsSlice";
 import { AppDispatch, RootState } from "~/store/store";
 
@@ -75,7 +75,7 @@ const StripePage: React.FC = () => {
         pt={2}
         height={HeaderHeight}
         sx={{
-          backgroundColor: "#5DD39E",
+          backgroundColor: Colors.backgroundPrimary,
         }}
       >
         <Pagination

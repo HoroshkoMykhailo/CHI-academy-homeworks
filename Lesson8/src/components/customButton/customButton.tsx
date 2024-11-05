@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
+import { Colors } from "~/constants/constants";
 
 interface CustomButtonProps {
     children: React.ReactNode;
@@ -20,8 +21,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     <Button
       onClick={onClick}
       sx={{
-        backgroundColor: "#BCE784",
-        color: "#313638",
+        backgroundColor: Colors.buttonColor,
+        color: Colors.textPrimary,
         width: width,
         height: height,
       }}
