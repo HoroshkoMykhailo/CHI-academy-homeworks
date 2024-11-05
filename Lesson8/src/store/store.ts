@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import exhibitsReducer from '~/store/slices/exhibitsSlice';
+import userReducer from '~/store/slices/userSlice';
 
 const store = configureStore({
   reducer: {
     exhibits: exhibitsReducer,
+    user: userReducer,
   },
 });
 

@@ -1,11 +1,9 @@
 import React from "react";
 import { LoginForm } from "~/components/components";
 import { Box } from "@mui/material";
+import { UserRequest } from "~/types/types";
 
 const LoginPage: React.FC = () => {
-  const handleLogin = (username: string, password: string) => {
-    console.log("Logging in with:", username, password);
-  };
 
   return (
     <Box
@@ -17,7 +15,7 @@ const LoginPage: React.FC = () => {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <LoginForm onSubmit={handleLogin} />
+      <LoginForm/>
     </Box>
   );
 };

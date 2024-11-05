@@ -3,17 +3,18 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ControlBar, Pagination, Post } from "~/components/components";
-import { AppRoute, Colors, HeaderHeight } from "~/constants/constants";
+import { Colors, HeaderHeight } from "~/constants/constants";
 import { getExhibits } from "~/store/slices/exhibitsSlice";
 import { AppDispatch, RootState } from "~/store/store";
 
 const StripePage: React.FC = () => {
-  const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
   const { exhibits, dataStatus, lastPage } = useSelector(
     (state: RootState) => state.exhibits
   );
+
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
   const [page, setPage] = React.useState(1);
   const [limit] = React.useState(5);
@@ -32,10 +33,7 @@ const StripePage: React.FC = () => {
   return (
     <>
       <ControlBar
-        isAuthenticated={false}
-        onLogout={() => {
-          navigate(AppRoute.LOGIN);
-        }}
+        isAuthenticated={isAuthenticated}
       />
       <Box
         sx={{

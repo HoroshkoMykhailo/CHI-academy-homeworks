@@ -10,8 +10,12 @@ import {
   RegisterPage,
   StripePage,
 } from "./layouts/layouts";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
 
 const App: React.FC = () => {
+  const isAllowed = useSelector((state: RootState) => state.user.isAuthenticated);
+
   return (
     <Router>
       <Routes>
@@ -21,7 +25,7 @@ const App: React.FC = () => {
         <Route
           path={AppRoute.HOME}
           element={
-            <ProtectedRoute isAllowed={true}>
+            <ProtectedRoute isAllowed={isAllowed}>
               <HomePage />
             </ProtectedRoute>
           }
@@ -29,7 +33,7 @@ const App: React.FC = () => {
         <Route
           path={AppRoute.NEW_POST}
           element={
-            <ProtectedRoute isAllowed={true}>
+            <ProtectedRoute isAllowed={isAllowed}>
               <NewPost />
             </ProtectedRoute>
           }

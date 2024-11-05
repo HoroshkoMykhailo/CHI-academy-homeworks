@@ -2,12 +2,9 @@ import React from "react";
 
 import { Box } from "@mui/material";
 import { RegisterForm } from "~/components/components";
+import { UserRequest } from "~/types/types";
 
 const RegisterPage: React.FC = () => {
-  const handleRegister = (username: string, password: string) => {
-    console.log("Registering with:", username, password);
-  };
-
   return (
      <Box
       sx={{
@@ -18,7 +15,7 @@ const RegisterPage: React.FC = () => {
         backgroundColor: "#f5f5f5",
       }}
     >
-      <RegisterForm onSubmit={handleRegister} />
+      <RegisterForm/>
     </Box>
   );
 };

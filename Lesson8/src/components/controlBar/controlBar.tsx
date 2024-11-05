@@ -1,21 +1,29 @@
 import React from 'react';
-import { AppBar, Toolbar, Button, TextField, Box } from '@mui/material';
+import { AppBar, Toolbar, Box } from '@mui/material';
 import { AppRoute, HeaderHeight } from '~/constants/constants';
 import './controlBar.css';
 import { CustomButton } from '~/components/components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '~/store/slices/userSlice';
+import { AppDispatch } from '~/store/store';
 
 interface ControlBarProps {
   isAuthenticated: boolean;
-  onLogout: () => void;
 }
 
 const ControlBar: React.FC<ControlBarProps> = ({
   isAuthenticated,
-  onLogout,
 }) => {
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onLogout = () => {
+    dispatch(logout());
+    navigate(AppRoute.LOGIN);
+  }
 
   const handleLogin = () => {
     navigate(AppRoute.LOGIN);

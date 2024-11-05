@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { StyledTextField } from '~/components/components';
 import { Colors } from "~/constants/constants";
+import { UserRequest } from "~/types/types";
 
 interface FormComponentProps {
   buttonLabel: string;
   linkText: string;
   onLinkClick: () => void;
-  onSubmit: (username: string, password: string) => void;
+  onSubmit: (userData: UserRequest) => void;
 }
 
 const FormComponent: React.FC<FormComponentProps> = ({ buttonLabel, linkText, onLinkClick, onSubmit }) => {
@@ -16,7 +17,7 @@ const FormComponent: React.FC<FormComponentProps> = ({ buttonLabel, linkText, on
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    onSubmit(username, password);
+    onSubmit({username, password});
   };
 
   return (

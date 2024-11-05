@@ -9,7 +9,6 @@ const Post: React.FC<Exhibit> = (exhibit) => {
       <CardMedia
         component="img"
         width="600"
-        height="300"
         image={BackendUrl + exhibit.imageUrl}
         alt={exhibit.description}
       />
