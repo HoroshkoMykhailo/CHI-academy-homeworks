@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createExhibit, fetchExhibitById } from "~/api/exhibitActions";
+import { createExhibit, deleteExhibit, fetchExhibitById } from "~/api/exhibitActions";
 import { DataStatus } from "~/constants/constants";
 import { ErrorResponse, Exhibit } from "~/types/types";
 import { ValueOf } from "~/utils/utils";
@@ -17,6 +17,13 @@ export const createPost = createAsyncThunk(
     return await createExhibit(description, image);
   }
 );
+
+export const deletePost = createAsyncThunk(
+  "exhibits/delete",
+  async (id: number) => {
+    return await deleteExhibit(id);
+  }
+)
 
 interface ExhibitState {
     exhibit: Exhibit | null;
@@ -66,6 +73,19 @@ const exhibitSlice = createSlice({
             }
           )
           .addCase(createPost.rejected, (state) => {
+            state.dataStatus = DataStatus.REJECTED;
+          })
+          .addCase(deletePost.pending, (state) => {
+            state.dataStatus = DataStatus.PENDING;
+          })
+          .addCase(
+            deletePost.fulfilled,
+            (state, action: PayloadAction<Exhibit>) => {
+              state.dataStatus = DataStatus.FULFILLED;
+              state.exhibit = action.payload;
+            }
+          )
+          .addCase(deletePost.rejected, (state) => {
             state.dataStatus = DataStatus.REJECTED;
           });
     },

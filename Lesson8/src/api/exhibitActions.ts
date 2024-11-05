@@ -21,4 +21,9 @@ export const createExhibit = async (description: string, image: File): Promise<E
     },
   });
   return response.data;
-}
+};
+
+export const deleteExhibit = async (id: number) => {
+  const response = await axiosInstance.delete(`/api/exhibits/${id}`);
+  return response.data;
+};

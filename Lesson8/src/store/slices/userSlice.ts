@@ -88,11 +88,11 @@ const userSlice = createSlice({
       })
       .addCase(
         fetch.fulfilled,
-        (state, action: PayloadAction<loginUserResponse>) => {
+        (state, action: PayloadAction<User>) => {
           state.dataStatus = DataStatus.FULFILLED;
           state.user = {
-            id: action.payload.userId,
-            username: action.payload.userName,
+            id: action.payload.id,
+            username: action.payload.username,
           };
           state.isAuthenticated = true;
         }

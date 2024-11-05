@@ -3,6 +3,8 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { Post, Pagination } from "~/components/components";
 import { Colors, HeaderHeight } from "~/constants/constants";
 import { Exhibit } from "~/types/types";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/store/store";
 
 interface ExhibitsListProps {
   exhibits: Exhibit[];
@@ -10,6 +12,7 @@ interface ExhibitsListProps {
   page: number;
   lastPage: number;
   onPageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
+  onDeleteExhibit: (id: number) => void;
 }
 
 const ExhibitsList: React.FC<ExhibitsListProps> = ({
@@ -18,7 +21,11 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
   page,
   lastPage,
   onPageChange,
-}) => (
+  onDeleteExhibit,
+}) => {
+  const { user } = useSelector((state: RootState) => state.user);
+  console.log(user);
+  return (
   <>
     <Box
       sx={{
@@ -47,7 +54,7 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
       {dataStatus === "fulfilled" &&
         exhibits.map((exhibit) => (
           <Box key={exhibit.id} mb={3} width="100%" display="flex" justifyContent="center">
-            <Post {...exhibit} />
+            <Post ownerId={user?.id} onDelete={onDeleteExhibit} {...exhibit} />
           </Box>
         ))}
     </Box>
@@ -64,5 +71,6 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
     </Box>
   </>
 );
+}
 
 export { ExhibitsList };

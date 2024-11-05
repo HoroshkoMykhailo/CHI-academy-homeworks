@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { AppRoute, BackendUrl } from '~/constants/constants';
-import { HTTPCode } from '~/constants/constants';
+import { BackendUrl } from '~/constants/constants';
 
 const axiosInstance = axios.create({
   baseURL: BackendUrl,

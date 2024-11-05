@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ControlBar, ExhibitsList, Pagination, Post } from "~/components/components";
+import { deletePost } from "~/store/slices/exhibitSlice";
 import { getExhibits } from "~/store/slices/exhibitsSlice";
 import { AppDispatch, RootState } from "~/store/store";
 
@@ -20,6 +21,11 @@ const StripePage: React.FC = () => {
     setPage(value);
   };
 
+  const handleDeleteExhibit = async (id: number) => {
+    await dispatch(deletePost(id));
+    dispatch(getExhibits({ page, limit }));
+  };
+
   return (
     <>
       <ControlBar isAuthenticated={isAuthenticated} />
@@ -29,6 +35,7 @@ const StripePage: React.FC = () => {
         page={page}
         lastPage={lastPage}
         onPageChange={handlePageChange}
+        onDeleteExhibit={handleDeleteExhibit}
       />
     </>
   );

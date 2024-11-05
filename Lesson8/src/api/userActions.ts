@@ -1,4 +1,4 @@
-import { type registerUserResponse, type loginUserResponse } from '~/types/types';
+import { type registerUserResponse, type loginUserResponse, User } from '~/types/types';
 import axiosInstance from './axiosInstance';
 
 export const registerUser = async (username: string, password: string): Promise<registerUserResponse> => {
@@ -11,7 +11,7 @@ export const loginUser = async (username: string, password: string): Promise<log
     return response.data;
 };
 
-export const fetchUser = async (): Promise<loginUserResponse> => {
+export const fetchUser = async (): Promise<User> => {
     const response = await axiosInstance.get('/users/my-profile');
     return response.data;
 }
