@@ -1,17 +1,24 @@
-import { Exhibit, ExhibitsResponse } from '~/types/types';
+import { ErrorResponse, Exhibit, ExhibitsResponse } from '~/types/types';
 import axiosInstance from './axiosInstance';
 
-export const fetchExhibits = async (page: number, limit: number): Promise<ExhibitsResponse> => {
-  const response = await axiosInstance.get(`/api/exhibits?page=${page}&limit=${limit}`);
+export const fetchExhibits = async (page: number, limit: number, myPosts?: boolean): Promise<ExhibitsResponse> => {
+  const response = await axiosInstance.get(`/api/exhibits${myPosts ? '/my-posts' : ''}?page=${page}&limit=${limit}`);
   return response.data;
 };
 
 export const fetchExhibitById = async (id: number): Promise<Exhibit> => {
-  const response = await axiosInstance.get(`/api/exhibits/${id}`);
+  const response = await axiosInstance.get(`/api/exhibits/post/${id}`);
   return response.data;
 };
 
-export const fetchMyExhibits = async (page: number, limit: number): Promise<ExhibitsResponse> => {
-  const response = await axiosInstance.get('/api/exhibits/my-posts');
+export const createExhibit = async (description: string, image: File): Promise<Exhibit | ErrorResponse> => {
+  const formData = new FormData();
+  formData.append('description', description);
+  formData.append('image', image);
+  const response = await axiosInstance.post("/api/exhibits", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 }

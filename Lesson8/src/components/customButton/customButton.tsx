@@ -1,13 +1,15 @@
 import React from "react";
 import { Button, Typography } from "@mui/material";
 import { Colors } from "~/constants/constants";
+import { Link } from "react-router-dom";
 
 interface CustomButtonProps {
     children: React.ReactNode;
-    onClick: () => void;
+    onClick?: () => void;
     width?: string | number;
     height?: string | number;
     fontSize?: string | number;
+    link?: string;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -16,10 +18,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   width = 100,
   fontSize = "1.2rem",
   height = 40,
+  link
 }) => {
   return (
     <Button
       onClick={onClick}
+      component={link ? Link : "button"}
+      to={link ? link : undefined}
       sx={{
         backgroundColor: Colors.buttonColor,
         color: Colors.textPrimary,

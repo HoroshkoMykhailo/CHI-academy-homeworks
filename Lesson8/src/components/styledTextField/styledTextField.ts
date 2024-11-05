@@ -2,7 +2,7 @@ import { styled, TextField } from "@mui/material";
 import { Colors } from "~/constants/constants";
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
-    backgroundColor: "#F7EDF0",
+    backgroundColor: Colors.textFields,
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: Colors.textPrimary,

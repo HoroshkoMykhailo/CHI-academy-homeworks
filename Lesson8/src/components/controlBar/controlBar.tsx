@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Box } from '@mui/material';
-import { AppRoute, HeaderHeight } from '~/constants/constants';
+import { AppRoute, Colors, HeaderHeight } from '~/constants/constants';
 import './controlBar.css';
 import { CustomButton } from '~/components/components';
 import { useNavigate } from 'react-router-dom';
@@ -31,16 +31,8 @@ const ControlBar: React.FC<ControlBarProps> = ({
     navigate(AppRoute.LOGIN);
   };
 
-  const handleNewPost = () => {
-    navigate(AppRoute.NEW_POST);
-  };
-
-  const handleMyPosts = () => {
-    myPosts ? navigate(AppRoute.STRIPE) : navigate(AppRoute.HOME);
-  };
-
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#5DD39E', height: HeaderHeight }}>
+    <AppBar position="static" sx={{ backgroundColor: Colors.backgroundPrimary, height: HeaderHeight }}>
       <Toolbar>
         <Box className="controlContainer">
         {isAuthenticated ? (
@@ -48,10 +40,10 @@ const ControlBar: React.FC<ControlBarProps> = ({
             <CustomButton width={120} onClick={onLogout}>
               Logout
             </CustomButton >
-            <CustomButton width={220} onClick={handleMyPosts}>
+            <CustomButton width={220} link={myPosts ? AppRoute.STRIPE : AppRoute.HOME}>
               {myPosts ? 'To Stripe' : 'My Posts'}
             </CustomButton>
-            <CustomButton width={120} onClick={handleNewPost} fontSize={"2rem"}>
+            <CustomButton width={120} fontSize={"2rem"} link={AppRoute.NEW_POST}>
               +
             </CustomButton>
           </>

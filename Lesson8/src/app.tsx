@@ -10,15 +10,11 @@ import {
   RegisterPage,
   StripePage,
 } from "./layouts/layouts";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/store/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/store/store";
 import { fetch } from "~/store/slices/userSlice";
 
 const App: React.FC = () => {
-  const isAllowed = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -37,7 +33,7 @@ const App: React.FC = () => {
         <Route
           path={AppRoute.HOME}
           element={
-            <ProtectedRoute isAllowed={isAllowed}>
+            <ProtectedRoute>
               <HomePage />
             </ProtectedRoute>
           }
@@ -45,7 +41,7 @@ const App: React.FC = () => {
         <Route
           path={AppRoute.NEW_POST}
           element={
-            <ProtectedRoute isAllowed={isAllowed}>
+            <ProtectedRoute>
               <NewPost />
             </ProtectedRoute>
           }
