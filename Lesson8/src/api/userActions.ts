@@ -10,3 +10,8 @@ export const loginUser = async (username: string, password: string): Promise<log
     const response = await axiosInstance.post('/api/auth/login', { username, password });
     return response.data;
 };
+
+export const fetchUser = async (): Promise<loginUserResponse> => {
+    const response = await axiosInstance.get('/users/my-profile');
+    return response.data;
+}

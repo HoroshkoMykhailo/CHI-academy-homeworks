@@ -1,5 +1,5 @@
-import React from "react";
-import { ProtectedRoute } from "~/components/components";
+import React, { useEffect } from "react";
+import { CustomAlert, ProtectedRoute } from "~/components/components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AppRoute } from "~/constants/constants";
 import {
@@ -10,11 +10,23 @@ import {
   RegisterPage,
   StripePage,
 } from "./layouts/layouts";
-import { useSelector } from "react-redux";
-import { RootState } from "./store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/store/store";
+import { fetch } from "~/store/slices/userSlice";
 
 const App: React.FC = () => {
-  const isAllowed = useSelector((state: RootState) => state.user.isAuthenticated);
+  const isAllowed = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetch());
+    }
+  }, [dispatch]);
 
   return (
     <Router>
@@ -38,8 +50,9 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route path={AppRoute.ANY} element={<NotFound/>} />
+        <Route path={AppRoute.ANY} element={<NotFound />} />
       </Routes>
+      <CustomAlert />
     </Router>
   );
 };

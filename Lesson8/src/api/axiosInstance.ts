@@ -20,17 +20,4 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === HTTPCode.UNAUTHORIZED) {
-
-      localStorage.removeItem('token');
-      window.location.replace(AppRoute.LOGIN);
-    }
-    return Promise.reject(error);
-  }
-);
-
 export default axiosInstance;

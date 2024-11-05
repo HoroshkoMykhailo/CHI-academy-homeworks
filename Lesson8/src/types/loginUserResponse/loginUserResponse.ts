@@ -1,5 +1,5 @@
 export interface loginUserResponse {
-    token: string;
+    access_token: string;
     userName: string;
     userId: number;
 }

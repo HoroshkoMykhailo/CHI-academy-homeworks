@@ -9,3 +9,4 @@ export { LoginForm } from "./loginForm/loginForm";
 export { CustomButton } from "./customButton/customButton";
 export { StyledTextField } from "./styledTextField/styledTextField";
 export { FormComponent } from "./formComponent/formComponent";
+export { CustomAlert } from "./customAlert/customAlert";    
