@@ -10,10 +10,12 @@ import { AppDispatch } from '~/store/store';
 
 interface ControlBarProps {
   isAuthenticated: boolean;
+  myPosts?: boolean;
 }
 
 const ControlBar: React.FC<ControlBarProps> = ({
   isAuthenticated,
+  myPosts=false
 }) => {
 
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const ControlBar: React.FC<ControlBarProps> = ({
   };
 
   const handleMyPosts = () => {
-    navigate(AppRoute.HOME);
+    myPosts ? navigate(AppRoute.STRIPE) : navigate(AppRoute.HOME);
   };
 
   return (
@@ -47,7 +49,7 @@ const ControlBar: React.FC<ControlBarProps> = ({
               Logout
             </CustomButton >
             <CustomButton width={220} onClick={handleMyPosts}>
-              My posts
+              {myPosts ? 'To Stripe' : 'My Posts'}
             </CustomButton>
             <CustomButton width={120} onClick={handleNewPost} fontSize={"2rem"}>
               +

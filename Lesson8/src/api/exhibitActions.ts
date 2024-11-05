@@ -10,3 +10,8 @@ export const fetchExhibitById = async (id: number): Promise<Exhibit> => {
   const response = await axiosInstance.get(`/api/exhibits/${id}`);
   return response.data;
 };
+
+export const fetchMyExhibits = async (page: number, limit: number): Promise<ExhibitsResponse> => {
+  const response = await axiosInstance.get('/api/exhibits/my-posts');
+  return response.data;
+}
