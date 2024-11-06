@@ -10,6 +10,7 @@ interface CustomButtonProps {
     height?: string | number;
     fontSize?: string | number;
     link?: string;
+    disabled?: boolean;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -18,13 +19,15 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   width = 100,
   fontSize = "1.2rem",
   height = 40,
-  link
+  link,
+  disabled = false,
 }) => {
   return (
     <Button
       onClick={onClick}
       component={link ? Link : "button"}
       to={link ? link : undefined}
+      disabled={disabled}
       sx={{
         backgroundColor: Colors.buttonColor,
         color: Colors.textPrimary,

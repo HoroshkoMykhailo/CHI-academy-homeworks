@@ -4,4 +4,4 @@ export { type ExhibitsResponse } from './exhibitsResponse/exhibitsResponse';
 export { type registerUserResponse } from './registerUserResponse/registerUserResponse';
 export { type loginUserResponse } from './loginUserResponse/loginUserResponse';
 export { type ErrorResponse } from './errorResponse/errorResponse';
-export { type Comment } from './comment/comment';
+export { type CommentI } from './comment/comment';
