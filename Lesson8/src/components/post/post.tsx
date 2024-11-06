@@ -1,16 +1,23 @@
-import { Card, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React from "react";
+import React, { useState } from "react";
 import { BackendUrl } from "~/constants/constants";
 import { Exhibit } from "~/types/types";
+import { CommentStripe } from "../components";
 
 interface PostProps extends Exhibit {
   ownerId: number | undefined;
   onDelete: (id: number) => void;
 }
 const Post: React.FC<PostProps> = ({ ownerId, onDelete, ...exhibit }) => {
+  const [showComments, setShowComments] = useState(false);
+
+  const handleToggleComments = () => {
+    setShowComments((prev) => !prev);
+  };
+  
   return (
-    <Card sx={{ width: 600, position: "relative" }}>
+    <Card sx={{ width: 600, position: "relative", mb: 2 }}>
       <CardMedia
         component="img"
         width="600"
@@ -24,18 +31,35 @@ const Post: React.FC<PostProps> = ({ ownerId, onDelete, ...exhibit }) => {
         <Typography variant="body2" color="text.secondary">
           {exhibit.description}
         </Typography>
-        <Typography variant="caption" display="block" color="text.secondary">
-          Comments: {exhibit.commentCount} • Created:{" "}
-          {new Date(exhibit.createdAt).toLocaleDateString()}
-        </Typography>
-        {ownerId === exhibit.user.id && (
-          <IconButton
-            aria-label="delete post"
-            onClick={() => onDelete(exhibit.id)}
-            sx={{ position: "absolute", bottom: 10, right: 8 }}
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 1 }}>
+          <Typography variant="caption" display="block" color="text.secondary">
+            Comments: {exhibit.commentCount} • Created:{" "}
+            {new Date(exhibit.createdAt).toLocaleDateString()}
+          </Typography>
+          <Button
+            onClick={handleToggleComments}
+            sx={{
+              color: "text.secondary",
+              fontSize: "0.75rem",
+              textTransform: "none",
+              mr: 1,
+            }}
           >
-            <DeleteIcon />
-          </IconButton>
+            {showComments ? "Hide comments" : "Open comments"}
+          </Button>
+          {ownerId === exhibit.user.id && (
+            <IconButton
+              aria-label="delete post"
+              onClick={() => onDelete(exhibit.id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
+        </Box>
+        {showComments && (
+          <Box sx={{ mt: 2, p: 2, borderTop: "1px solid #ddd" }}>
+            <CommentStripe exhibitId={exhibit.id} />
+          </Box>
         )}
       </CardContent>
     </Card>

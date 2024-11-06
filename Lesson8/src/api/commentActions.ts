@@ -1,6 +1,7 @@
 import axiosInstance from "./axiosInstance";
+import { CommentI } from "~/types/types";
 
-export const getComments = async (id: number) => {
+export const getComments = async (id: number): Promise<CommentI[]> => {
     const response = await axiosInstance.get(`/api/exhibits/${id}/comments/`);
     return response.data;
 };
