@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, SxProps, Typography } from "@mui/material";
 import { Colors } from "~/constants/constants";
 import { Link } from "react-router-dom";
 
@@ -11,6 +11,7 @@ interface CustomButtonProps {
     fontSize?: string | number;
     link?: string;
     disabled?: boolean;
+    sx?: SxProps;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -21,6 +22,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   height = 40,
   link,
   disabled = false,
+  sx
 }) => {
   return (
     <Button
@@ -33,6 +35,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         color: Colors.textPrimary,
         width: width,
         height: height,
+        ...sx,
       }}
     >
       <Typography sx={{ fontSize: fontSize }}>{children}</Typography>

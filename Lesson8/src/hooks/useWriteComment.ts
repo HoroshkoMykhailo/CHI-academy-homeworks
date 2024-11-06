@@ -2,7 +2,7 @@ import { useRequest } from "ahooks";
 import { useState } from "react";
 import { writeComment } from "~/api/commentActions";
 
-export const useSubmitComment = (exhibitId: number, refreshComments: () => void) => {
+export const useWriteComment = (exhibitId: number, refreshComments: () => void) => {
   const [commentText, setCommentText] = useState("");
 
   const { loading, run: submitComment } = useRequest(

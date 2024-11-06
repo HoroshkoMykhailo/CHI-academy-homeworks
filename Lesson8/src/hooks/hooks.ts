@@ -1,2 +1,2 @@
 export { useComments } from "./useComments";
-export { useSubmitComment } from "./useSubmitComment";
+export { useWriteComment } from "./useWriteComment";

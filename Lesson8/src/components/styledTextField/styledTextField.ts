@@ -11,7 +11,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
         borderColor: Colors.textPrimary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: "#2E7D32",
+        border: `1px solid ${Colors.textPrimary}`, 
       },
     },
     "& .MuiInputLabel-root": {

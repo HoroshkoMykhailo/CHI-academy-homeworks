@@ -57,7 +57,7 @@ const Post: React.FC<PostProps> = ({ ownerId, onDelete, ...exhibit }) => {
           )}
         </Box>
         {showComments && (
-          <Box sx={{ mt: 2, p: 2, borderTop: "1px solid #ddd" }}>
+          <Box sx={{ p: 0, pt: 2, borderTop: "1px solid #ddd" }}>
             <CommentStripe exhibitId={exhibit.id} />
           </Box>
         )}
