@@ -27,7 +27,6 @@ const Post: React.FC<PostProps> = ({ ownerId, onDelete, ...exhibit}) => {
   }
 
   useEffect(() => {
-    console.log(stExhibit);
     if(stExhibit.dataStatus === DataStatus.FULFILLED && stExhibit.exhibit?.id == exhibit.id) {
       setLocalExhibit(stExhibit.exhibit ?? localExhibit);
     }

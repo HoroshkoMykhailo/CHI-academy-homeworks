@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { StyledTextField } from "~/components/components";
 import { AppRoute, Colors, DataStatus } from "~/constants/constants";
@@ -44,15 +44,18 @@ const NewPost: React.FC = () => {
     }
   };
 
-  if(dataStatus === DataStatus.FULFILLED) {
-    navigate(AppRoute.STRIPE);
-  }
-  else if(dataStatus === DataStatus.REJECTED) {
-    dispatch(showNotification({
-      message: "Something went wrong",
-      severity: "error",
-    }));
-  }
+  useEffect(() => {
+    if(dataStatus === DataStatus.FULFILLED) {
+      navigate(AppRoute.STRIPE);
+    }
+    else if(dataStatus === DataStatus.REJECTED) {
+      dispatch(showNotification({
+        message: "Something went wrong",
+        severity: "error",
+      }));
+    }
+  }, [dataStatus, dispatch]);
+  
 
   return (
     <Box
