@@ -6,13 +6,14 @@ import { useComments, useWriteComment } from "~/hooks/hooks";
 import { useDeleteComment } from "~/hooks/useDeleteComment";
 
 interface CommentStripeProps {
-    exhibitId: number
+    exhibitId: number;
+    refreshPost: () => void;
 }
 
-const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId }) => {
+const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId, refreshPost }) => {
     const { comments, loading, error, refresh } = useComments(exhibitId);
-    const { commentText, setCommentText, submitComment, loading: writing } = useWriteComment(exhibitId, refresh);
-    const { deleteCommentById, loading: deleting, error: deleteError } = useDeleteComment(exhibitId);
+    const { commentText, setCommentText, submitComment, loading: writing, error: writeError } = useWriteComment(exhibitId, refresh, refreshPost);
+    const { deleteCommentById, loading: deleting, error: deleteError } = useDeleteComment(exhibitId, refresh, refreshPost);
 
     const handleSubmit = () => {
       if (commentText.trim()) {
@@ -23,14 +24,6 @@ const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId }) => {
     const handleDelete = (commentId: number) => {
       deleteCommentById(commentId);
     };
-
-    useEffect(() => {
-        if (!deleting) {
-          if (!deleteError) {
-            refresh(); 
-          } 
-        }
-      }, [deleting, deleteError]);
      
     return (
       <>

@@ -1,9 +1,17 @@
 import { useRequest } from "ahooks";
 import { deleteComment } from "~/api/commentActions";
 
-export const useDeleteComment = (exhibitId: number) => {
+export const useDeleteComment = (
+  exhibitId: number,
+  refreshComments: () => void,
+  refreshPost: () => void
+) => {
   const { loading, error, run } = useRequest(
-    (id: number) => deleteComment(exhibitId, id),
+    async (id: number) => {
+      await deleteComment(exhibitId, id);
+      refreshComments();
+      refreshPost();
+    },
     { manual: true }
   );
 
