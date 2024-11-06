@@ -63,6 +63,9 @@ const exhibitSlice = createSlice({
               if ('status' in action.payload && action.payload.status === HTTPCode.BAD_REQUEST) {
                 state.dataStatus = DataStatus.REJECTED;
               }
+              else{
+                state.dataStatus = DataStatus.FULFILLED;
+              }
             }
           )
           .addCase(createPost.rejected, (state) => {
