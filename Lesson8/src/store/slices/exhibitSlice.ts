@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createExhibit, deleteExhibit, fetchExhibitById } from "~/api/exhibitActions";
-import { DataStatus } from "~/constants/constants";
+import { DataStatus, HTTPCode } from "~/constants/constants";
 import { ErrorResponse, Exhibit } from "~/types/types";
 import { ValueOf } from "~/utils/utils";
 
@@ -60,15 +60,8 @@ const exhibitSlice = createSlice({
           .addCase(
             createPost.fulfilled,
             (state, action: PayloadAction<Exhibit | ErrorResponse>) => {
-              if ("message" in action.payload) {
+              if ('status' in action.payload && action.payload.status === HTTPCode.BAD_REQUEST) {
                 state.dataStatus = DataStatus.REJECTED;
-              } else {
-                state.dataStatus = DataStatus.FULFILLED;
-                if ("id" in action.payload) {
-                  state.exhibit = action.payload;
-                } else {
-                  state.exhibit = null;
-                }
               }
             }
           )
