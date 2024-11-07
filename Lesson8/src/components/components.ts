@@ -11,3 +11,4 @@ export { StyledTextField } from "./styledTextField/styledTextField";
 export { FormComponent } from "./formComponent/formComponent";
 export { CustomAlert } from "./customAlert/customAlert";
 export { ExhibitsList } from "./exhibitsList/exhibitsList";
+export { NewPostForm } from "./newPostForm/newPostForm";

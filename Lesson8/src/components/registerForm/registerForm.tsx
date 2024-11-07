@@ -14,6 +14,7 @@ const RegisterForm: React.FC = () => {
     const { dataStatus } = useSelector((state: RootState) => state.user);
 
     const handleRegister = ({ username, password }: UserRequest) => {
+      console.log(username, password);
       dispatch(register({ username, password }));
     };
 
