@@ -13,9 +13,12 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "~/store/store";
 import { fetch } from "~/store/slices/userSlice";
+import { useNewPostNotification } from "./hooks/useNewPostNotification";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  
+  useNewPostNotification();
 
   useEffect(() => {
     const token = localStorage.getItem("token");

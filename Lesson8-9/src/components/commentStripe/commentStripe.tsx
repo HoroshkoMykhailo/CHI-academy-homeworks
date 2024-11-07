@@ -3,8 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Comment, CustomButton, StyledTextField } from "~/components/components";
 import { Colors } from "~/constants/constants";
-import { useComments, useWriteComment } from "~/hooks/hooks";
-import { useDeleteComment } from "~/hooks/useDeleteComment";
+import { useComments, useWriteComment, useDeleteComment } from "~/hooks/hooks";
 import { showNotification } from "~/store/slices/notificationSlice";
 
 interface CommentStripeProps {

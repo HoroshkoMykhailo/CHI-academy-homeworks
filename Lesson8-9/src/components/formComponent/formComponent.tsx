@@ -16,10 +16,10 @@ interface FormComponentProps {
 const validationSchema = Yup.object({
   username: Yup.string()
     .required("Username is required")
-    .min(3, "Username must be at least 3 characters"),
+    .min(4, "Username must be at least 4 characters"),
   password: Yup.string()
     .required("Password is required")
-    .min(6, "Password must be at least 6 characters")
+    .min(4, "Password must be at least 4 characters")
     .matches(/[a-zA-Z]/, "Password must contain at least one letter")
     .matches(/\d/, "Password must contain at least one number"),
 });
