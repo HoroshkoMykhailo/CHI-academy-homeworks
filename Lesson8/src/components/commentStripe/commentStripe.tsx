@@ -1,9 +1,11 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Comment, CustomButton, StyledTextField } from "~/components/components";
 import { Colors } from "~/constants/constants";
 import { useComments, useWriteComment } from "~/hooks/hooks";
 import { useDeleteComment } from "~/hooks/useDeleteComment";
+import { showNotification } from "~/store/slices/notificationSlice";
 
 interface CommentStripeProps {
     exhibitId: number;
@@ -15,6 +17,8 @@ const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId, refreshPost })
     const { commentText, setCommentText, submitComment, loading: writing, error: writeError } = useWriteComment(exhibitId, refresh, refreshPost);
     const { deleteCommentById, loading: deleting, error: deleteError } = useDeleteComment(exhibitId, refresh, refreshPost);
 
+    const dispatch = useDispatch();
+    
     const handleSubmit = () => {
       if (commentText.trim()) {
         submitComment();
@@ -24,6 +28,16 @@ const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId, refreshPost })
     const handleDelete = (commentId: number) => {
       deleteCommentById(commentId);
     };
+
+    useEffect(() => {
+      if (writeError) {
+        setCommentText("");
+        dispatch(showNotification({
+          message: "Failed to write comment. Try to login",
+          severity: "error",
+        }))
+      }
+    }, [writeError]);
      
     return (
       <>
