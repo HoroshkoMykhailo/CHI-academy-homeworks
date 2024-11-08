@@ -1,18 +1,20 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { useRequest } from "ahooks";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { getComments } from "~/api/commentActions";
 import { Comment, CustomButton, StyledTextField } from "~/components/components";
 import { Colors } from "~/constants/constants";
-import { useComments, useWriteComment, useDeleteComment } from "~/hooks/hooks";
+import { useWriteComment, useDeleteComment } from "~/hooks/hooks";
 import { showNotification } from "~/store/slices/notificationSlice";
 
 interface CommentStripeProps {
     exhibitId: number;
-    refreshPost: () => void;
+    refreshPost: (id: number) => void;
 }
 
 const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId, refreshPost }) => {
-    const { comments, loading, error, refresh } = useComments(exhibitId);
+    const { data: comments, loading, error, refresh } = useRequest(() => getComments(exhibitId));;
     const { commentText, setCommentText, submitComment, loading: writing, error: writeError } = useWriteComment(exhibitId, refresh, refreshPost);
     const { deleteCommentById, loading: deleting, error: deleteError } = useDeleteComment(exhibitId, refresh, refreshPost);
 

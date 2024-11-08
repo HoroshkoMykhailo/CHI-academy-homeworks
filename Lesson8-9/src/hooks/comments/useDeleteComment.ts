@@ -4,13 +4,13 @@ import { deleteComment } from "~/api/commentActions";
 export const useDeleteComment = (
   exhibitId: number,
   refreshComments: () => void,
-  refreshPost: () => void
+  refreshPost: (id: number) => void
 ) => {
   const { loading, error, run } = useRequest(
     async (id: number) => {
       await deleteComment(exhibitId, id);
       refreshComments();
-      refreshPost();
+      refreshPost(exhibitId);
     },
     { manual: true }
   );

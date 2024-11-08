@@ -6,21 +6,26 @@ import { Exhibit } from "~/types/types";
 import { CommentStripe } from "../components";
 import { useSelector } from "react-redux";
 import { RootState } from "~/store/store";
-import { useExhibitById } from "~/hooks/hooks";
+import { useRequest } from "ahooks";
+import { fetchExhibitById } from "~/api/exhibitActions";
 
 interface PostProps extends Exhibit {
   onDelete: (id: number) => void;
 }
-const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
+const Post: React.FC<PostProps> = ({ onDelete, ...exhibit }) => {
   const { user } = useSelector((state: RootState) => state.user);
   const [showComments, setShowComments] = useState(false);
-  const { exhibit: localExhibit, loading, error, refreshExhibit } = useExhibitById(exhibit.id);
-
+  const { data: localExhibit, run: refreshExhibit } = useRequest(
+    fetchExhibitById,
+    {
+      manual: true,
+    }
+  );
 
   const handleToggleComments = () => {
     setShowComments((prev) => !prev);
   };
-  
+
   return (
     <Card sx={{ width: 600, position: "relative", mb: 2 }}>
       <CardMedia
@@ -36,10 +41,17 @@ const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
         <Typography variant="body2" color="text.secondary">
           {exhibit.description}
         </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mt: 1,
+          }}
+        >
           <Typography variant="caption" display="block" color="text.secondary">
-            Comments: {localExhibit?.commentCount ?? exhibit.commentCount} • Created:{" "}
-            {new Date(exhibit.createdAt).toLocaleDateString()}
+            Comments: {localExhibit?.commentCount ?? exhibit.commentCount} •
+            Created: {new Date(exhibit.createdAt).toLocaleDateString()}
           </Typography>
           <Button
             onClick={handleToggleComments}
@@ -52,7 +64,7 @@ const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
           >
             {showComments ? "Hide comments" : "Open comments"}
           </Button>
-          { user?.id === exhibit.user.id && (
+          {user?.id === exhibit.user.id && (
             <IconButton
               aria-label="delete post"
               onClick={() => onDelete(exhibit.id)}
@@ -63,7 +75,10 @@ const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
         </Box>
         {showComments && (
           <Box sx={{ p: 0, pt: 2, borderTop: "1px solid #ddd" }}>
-            <CommentStripe exhibitId={exhibit.id} refreshPost={refreshExhibit} />
+            <CommentStripe
+              exhibitId={exhibit.id}
+              refreshPost={refreshExhibit}
+            />
           </Box>
         )}
       </CardContent>

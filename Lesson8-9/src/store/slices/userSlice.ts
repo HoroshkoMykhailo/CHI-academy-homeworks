@@ -28,6 +28,7 @@ export const fetch = createAsyncThunk('user/fetch', async () => {
     return await fetchUser();
 });
 
+
 interface UserState {
     user: User | null;
     dataStatus: ValueOf<typeof DataStatus>;
@@ -36,13 +37,36 @@ interface UserState {
     message: string;
 }
 
-const initialState: UserState = {
-    user: null,
-    dataStatus: DataStatus.IDLE,
-    isAdmin: false,
-    isAuthenticated: false,
-    message: '',
-};
+const getInitialState = async () => {
+  const token = localStorage.getItem('token');
+  let error: string = '';
+  if (token) {
+    try{
+      const user = await fetchUser();
+      return {
+          user: user,
+          dataStatus: DataStatus.FULFILLED,
+          isAdmin: false,
+          isAuthenticated: true,
+          message: error,
+      };
+    }
+    catch(error: any) {
+      localStorage.removeItem('token');
+      error = error.message as string;
+    }
+  }
+
+  return {
+      user: null,
+      dataStatus: DataStatus.IDLE,
+      isAdmin: false,
+      isAuthenticated: false,
+      message: error,
+  };
+}
+
+const initialState: UserState = await getInitialState();
 
 const userSlice = createSlice({
   name: "user",

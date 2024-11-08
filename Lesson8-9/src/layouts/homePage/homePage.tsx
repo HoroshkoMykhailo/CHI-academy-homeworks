@@ -1,9 +1,10 @@
+import { useRequest } from "ahooks";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { deleteExhibit, fetchExhibits } from "~/api/exhibitActions";
 import { ControlBar, ExhibitsList } from "~/components/components";
-import { AppRoute } from "~/constants/constants";
-import { useDeleteExhibit, useExhibits } from "~/hooks/hooks";
+import { AppRoute, pageLimit } from "~/constants/constants";
 import { RootState } from "~/store/store";
 
 const HomePage: React.FC = () => {
@@ -14,8 +15,17 @@ const HomePage: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const page = parseInt(searchParams.get("page") || "1", 10);
 
-  const { data, loading, error, refresh } = useExhibits({ page, myPosts: true });
-  const { deletePost, loading: deleteLoading, error: deleteError } = useDeleteExhibit();
+  const { data, loading, error, refresh } = useRequest(
+    () => fetchExhibits(page, pageLimit, true),
+    { refreshDeps: [page] }
+  );
+
+  const { run: deletePost, error: deleteError, loading: deleteLoading } = useRequest(deleteExhibit, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+    }
+  });
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -27,12 +37,6 @@ const HomePage: React.FC = () => {
   const handleDeleteExhibit = (id: number) => {
     deletePost(id);
   };
-
-  useEffect(() => {
-    if (!deleteLoading){
-      refresh();
-    }
-  }, [deleteLoading]);
 
   return (
     <>

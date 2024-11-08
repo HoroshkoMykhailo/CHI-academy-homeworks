@@ -5,7 +5,7 @@ import { writeComment } from "~/api/commentActions";
 export const useWriteComment = (
   exhibitId: number,
   refreshComments: () => void,
-  refreshPost: () => void
+  refreshPost: (id: number) => void
 ) => {
   const [commentText, setCommentText] = useState("");
 
@@ -18,7 +18,7 @@ export const useWriteComment = (
       await writeComment(exhibitId, commentText);
       setCommentText("");
       refreshComments();
-      refreshPost();
+      refreshPost(exhibitId);
     },
     { manual: true }
   );

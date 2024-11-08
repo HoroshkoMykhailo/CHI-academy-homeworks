@@ -60,7 +60,7 @@ module.exports = (argv) => {
       new HtmlWebpackPlugin({
         template: "./public/index.html",
       }),
-      new FaviconsWebpackPlugin('./public/favicon.ico'),
+      new FaviconsWebpackPlugin('./public/favicon.png'),
       new webpack.DefinePlugin(envKeys),
       new CleanWebpackPlugin(),
     ],

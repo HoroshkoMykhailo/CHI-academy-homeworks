@@ -20,13 +20,6 @@ const App: React.FC = () => {
   
   useNewPostNotification();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatch(fetch());
-    }
-  }, []);
-
   return (
     <Router>
       <Routes>
