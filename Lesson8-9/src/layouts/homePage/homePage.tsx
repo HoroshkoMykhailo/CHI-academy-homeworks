@@ -1,15 +1,13 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ControlBar, ExhibitsList } from "~/components/components";
 import { AppRoute } from "~/constants/constants";
-import { useExhibits } from "~/hooks/hooks";
-import { deletePost } from "~/store/slices/exhibitSlice";
-import { AppDispatch, RootState } from "~/store/store";
+import { useDeleteExhibit, useExhibits } from "~/hooks/hooks";
+import { RootState } from "~/store/store";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
   const location = useLocation();
@@ -17,6 +15,7 @@ const HomePage: React.FC = () => {
   const page = parseInt(searchParams.get("page") || "1", 10);
 
   const { data, loading, error, refresh } = useExhibits({ page, myPosts: true });
+  const { deletePost, loading: deleteLoading, error: deleteError } = useDeleteExhibit();
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -25,10 +24,15 @@ const HomePage: React.FC = () => {
     navigate(`${AppRoute.HOME}/?page=${value}`);
   };
 
-  const handleDeleteExhibit = async (id: number) => {
-    await dispatch(deletePost(id));
-    refresh();
+  const handleDeleteExhibit = (id: number) => {
+    deletePost(id);
   };
+
+  useEffect(() => {
+    if (!deleteLoading){
+      refresh();
+    }
+  }, [deleteLoading]);
 
   return (
     <>

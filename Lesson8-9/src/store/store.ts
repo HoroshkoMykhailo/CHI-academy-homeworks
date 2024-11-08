@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '~/store/slices/userSlice';
 import notificationReducer from '~/store/slices/notificationSlice';
-import exhibitReducer  from '~/store/slices/exhibitSlice';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     notification: notificationReducer,
-    exhibit: exhibitReducer,
   },
 });
 

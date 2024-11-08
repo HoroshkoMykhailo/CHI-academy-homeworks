@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
 import { NewPostForm } from "~/components/components";
-import { AppRoute, DataStatus } from "~/constants/constants";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/store/store";
-import { createPost } from "~/store/slices/exhibitSlice";
+import { AppRoute } from "~/constants/constants";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/store/store";
 import { showNotification } from "~/store/slices/notificationSlice";
 import { useNavigate } from "react-router-dom";
+import { useCreateExhibit } from "~/hooks/hooks";
 
 const NewPost: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-
-  const { dataStatus } = useSelector((state: RootState) => state.exhibit);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isSubmitCompleted, setIsSubmitCompleted] = useState(false);
 
+  const { create, data, error, loading } = useCreateExhibit();
+  
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -23,10 +22,9 @@ const NewPost: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: { description: string; image: File | null }) => {
+  const handleSubmit = (values: { description: string; image: File | null }) => {
     if (values.image && values.description) {
-      await dispatch(createPost({ description: values.description, image: values.image }));
-      setIsSubmitCompleted(true);
+      create(values.description, values.image);
     } else {
       dispatch(
         showNotification({
@@ -38,20 +36,19 @@ const NewPost: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isSubmitCompleted) {
-      if (dataStatus === "fulfilled") {
+    if (!loading) {
+      if (data && !error) {
         navigate(AppRoute.STRIPE);
-      } else if (dataStatus === "rejected") {
+      } else if (error) {
         dispatch(
           showNotification({
-            message: "Something went wrong",
+            message: (error?.message as string) || "Something went wrong",
             severity: "error",
           })
         );
       }
     }
-  }, [dataStatus, isSubmitCompleted, dispatch, navigate]);
-
+  }, [loading]);
 
   return (
     <Box

@@ -1,3 +1,3 @@
-const pageLimit = 5;
+const pageLimit = 7;
 
 export { pageLimit }

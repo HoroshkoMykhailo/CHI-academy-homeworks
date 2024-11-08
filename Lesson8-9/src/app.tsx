@@ -25,7 +25,7 @@ const App: React.FC = () => {
     if (token) {
       dispatch(fetch());
     }
-  }, [dispatch]);
+  }, []);
 
   return (
     <Router>

@@ -1,14 +1,12 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ControlBar, ExhibitsList, Pagination, Post } from "~/components/components";
-import { useExhibits, useNewPostNotification } from "~/hooks/hooks";
-import { deletePost } from "~/store/slices/exhibitSlice";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ControlBar, ExhibitsList } from "~/components/components";
+import { useExhibits, useNewPostNotification, useDeleteExhibit } from "~/hooks/hooks";
 import { AppDispatch, RootState } from "~/store/store";
 
 const StripePage: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
   const location = useLocation();
@@ -16,6 +14,7 @@ const StripePage: React.FC = () => {
   const page = parseInt(searchParams.get("page") || "1", 10); 
 
   const { data, loading, error, refresh } = useExhibits({ page });
+  const { deletePost, loading: deleteLoading, error: deleteError } = useDeleteExhibit();
 
   useNewPostNotification(page, refresh);
   
@@ -23,10 +22,15 @@ const StripePage: React.FC = () => {
     navigate(`/?page=${value}`);
   };
 
-  const handleDeleteExhibit = async (id: number) => {
-    await dispatch(deletePost(id));
-    refresh();
+  const handleDeleteExhibit = (id: number) => {
+    deletePost(id);
   };
+
+  useEffect(() => {
+    if (!deleteLoading){
+      refresh();
+    }
+  }, [deleteLoading]);
 
   return (
     <>

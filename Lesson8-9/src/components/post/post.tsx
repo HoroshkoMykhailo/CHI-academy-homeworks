@@ -1,36 +1,25 @@
 import { Box, Button, Card, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React, { useEffect, useState } from "react";
-import { BackendUrl, DataStatus } from "~/constants/constants";
+import React, { useState } from "react";
+import { BackendUrl } from "~/constants/constants";
 import { Exhibit } from "~/types/types";
 import { CommentStripe } from "../components";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/store/store";
-import { getExhibitById } from "~/store/slices/exhibitSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "~/store/store";
+import { useExhibitById } from "~/hooks/hooks";
 
 interface PostProps extends Exhibit {
   onDelete: (id: number) => void;
 }
 const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
-  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.user);
   const [showComments, setShowComments] = useState(false);
-  const stExhibit = useSelector((state: RootState) => state.exhibit);
-  const [localExhibit, setLocalExhibit] = useState(exhibit);
+  const { exhibit: localExhibit, loading, error, refreshExhibit } = useExhibitById(exhibit.id);
+
 
   const handleToggleComments = () => {
     setShowComments((prev) => !prev);
   };
-
-  const refreshPost = () => {
-    dispatch(getExhibitById(exhibit.id));
-  }
-
-  useEffect(() => {
-    if(stExhibit.dataStatus === DataStatus.FULFILLED && stExhibit.exhibit?.id == exhibit.id) {
-      setLocalExhibit(stExhibit.exhibit ?? localExhibit);
-    }
-  }, [stExhibit])
   
   return (
     <Card sx={{ width: 600, position: "relative", mb: 2 }}>
@@ -49,7 +38,7 @@ const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 1 }}>
           <Typography variant="caption" display="block" color="text.secondary">
-            Comments: {localExhibit.commentCount} • Created:{" "}
+            Comments: {localExhibit?.commentCount ?? exhibit.commentCount} • Created:{" "}
             {new Date(exhibit.createdAt).toLocaleDateString()}
           </Typography>
           <Button
@@ -74,7 +63,7 @@ const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
         </Box>
         {showComments && (
           <Box sx={{ p: 0, pt: 2, borderTop: "1px solid #ddd" }}>
-            <CommentStripe exhibitId={exhibit.id} refreshPost={refreshPost} />
+            <CommentStripe exhibitId={exhibit.id} refreshPost={refreshExhibit} />
           </Box>
         )}
       </CardContent>
