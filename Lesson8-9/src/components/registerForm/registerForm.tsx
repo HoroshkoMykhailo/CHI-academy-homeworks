@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FormComponent } from "~/components/components";
 import { useNavigate } from "react-router-dom";
 import { AppRoute, DataStatus } from "~/constants/constants";
@@ -11,28 +11,35 @@ import { showNotification } from "~/store/slices/notificationSlice";
 const RegisterForm: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-    const { dataStatus } = useSelector((state: RootState) => state.user);
+    const { dataStatus, message } = useSelector((state: RootState) => state.user);
+    const [isRegistered, setIsRegistered] = useState(false);
 
-    const handleRegister = ({ username, password }: UserRequest) => {
-      console.log(username, password);
-      dispatch(register({ username, password }));
+    const handleRegister = async ({ username, password }: UserRequest) => {
+      await dispatch(register({ username, password }));
+      setIsRegistered(true);
     };
 
     useEffect(() => {
+      if (!isRegistered) {
+        return;
+      }
+      else{
+        setIsRegistered(false);
+      }
       if (dataStatus === DataStatus.REJECTED) {
         dispatch(showNotification({
-          message: "Incorrect credentials",
+          message: message,
           severity: "error",
         }));
       }
       else if(dataStatus === DataStatus.FULFILLED) {
         dispatch(showNotification({
-          message: "Registered successfully",
+          message: message,
           severity: "success",
         }));
         navigate(AppRoute.LOGIN);
       }
-    }, [dataStatus, dispatch]);
+    }, [isRegistered]);
     
     return (
       <FormComponent

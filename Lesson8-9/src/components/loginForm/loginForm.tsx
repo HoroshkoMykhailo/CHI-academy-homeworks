@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FormComponent } from "~/components/components";
 import { useNavigate } from "react-router-dom";
 import { AppRoute, DataStatus } from "~/constants/constants";
@@ -11,11 +11,10 @@ import { showNotification } from "~/store/slices/notificationSlice";
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-    
-    const { isAuthenticated, dataStatus } = useSelector((state: RootState) => state.user);
+    const { isAuthenticated, dataStatus, message } = useSelector((state: RootState) => state.user);
 
-    const handleLogin = ({ username, password }: UserRequest) => {
-      dispatch(login({ username, password }));
+    const handleLogin = async ({ username, password }: UserRequest) => {
+      await dispatch(login({ username, password }));
     };
 
     useEffect(() => {
@@ -27,11 +26,11 @@ const LoginForm: React.FC = () => {
     useEffect(() => {
       if (dataStatus === DataStatus.REJECTED) {
         dispatch(showNotification({
-          message: "Incorrect username or password",
+          message: message,
           severity: "error",
         }));
       }
-    }, [dataStatus, dispatch]);
+    }, [dataStatus]);
 
     return (
         <FormComponent

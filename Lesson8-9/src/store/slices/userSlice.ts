@@ -1,12 +1,24 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios, { Axios } from "axios";
 import { fetchUser, loginUser, registerUser } from "~/api/userActions";
 import { DataStatus } from "~/constants/constants";
 import { loginUserResponse, registerUserResponse, User, UserRequest } from "~/types/types";
 import { ValueOf } from "~/utils/utils";
 
-export const register = createAsyncThunk('user/register', async ({ username, password }: UserRequest) => {
-    return await registerUser(username, password);
-});
+export const register = createAsyncThunk(
+  "user/register",
+  async ({ username, password }: UserRequest, { rejectWithValue }) => {
+    try {
+      return await registerUser(username, password);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw rejectWithValue(
+          error.response?.data?.message || "Error occurred during registration"
+        );
+      }
+    }
+  }
+);
 
 export const login = createAsyncThunk('user/login', async ({ username, password }: UserRequest) => {
     return await loginUser(username, password);
@@ -51,18 +63,21 @@ const userSlice = createSlice({
       })
       .addCase(
         register.fulfilled,
-        (state, action: PayloadAction<registerUserResponse>) => {
-          state.dataStatus = DataStatus.FULFILLED;
-          state.user = {
-            id: action.payload.id,
-            username: action.payload.username,
-          };
-          state.isAdmin = action.payload.isAdmin;
-          state.message = 'Registration successful';
+        (state, action: PayloadAction<registerUserResponse | undefined>) => {
+          if (action.payload) {
+            state.dataStatus = DataStatus.FULFILLED;
+            state.user = {
+              id: action.payload.id || 0,
+              username: action.payload.username || "",
+            };
+            state.isAdmin = action.payload.isAdmin || false;
+            state.message = "Registration successful";
+          }
         }
       )
-      .addCase(register.rejected, (state) => {
+      .addCase(register.rejected, (state, action) => {
         state.dataStatus = DataStatus.REJECTED;
+        state.message = action.payload as string;
       })
       .addCase(login.pending, (state) => {
         state.dataStatus = DataStatus.PENDING;
@@ -86,17 +101,14 @@ const userSlice = createSlice({
       .addCase(fetch.pending, (state) => {
         state.dataStatus = DataStatus.PENDING;
       })
-      .addCase(
-        fetch.fulfilled,
-        (state, action: PayloadAction<User>) => {
-          state.dataStatus = DataStatus.FULFILLED;
-          state.user = {
-            id: action.payload.id,
-            username: action.payload.username,
-          };
-          state.isAuthenticated = true;
-        }
-      )
+      .addCase(fetch.fulfilled, (state, action: PayloadAction<User>) => {
+        state.dataStatus = DataStatus.FULFILLED;
+        state.user = {
+          id: action.payload.id,
+          username: action.payload.username,
+        };
+        state.isAuthenticated = true;
+      })
       .addCase(fetch.rejected, (state) => {
         state.dataStatus = DataStatus.REJECTED;
       });
