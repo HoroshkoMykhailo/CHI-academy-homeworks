@@ -1,43 +1,42 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ControlBar, ExhibitsList, Pagination, Post } from "~/components/components";
-import { useNewPostNotification } from "~/hooks/useNewPostNotification";
+import { useExhibits, useNewPostNotification } from "~/hooks/hooks";
 import { deletePost } from "~/store/slices/exhibitSlice";
-import { getExhibits } from "~/store/slices/exhibitsSlice";
 import { AppDispatch, RootState } from "~/store/store";
 
 const StripePage: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { exhibits, dataStatus, lastPage } = useSelector((state: RootState) => state.exhibits);
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
-  const [page, setPage] = React.useState(1);
-  const [limit] = React.useState(5);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const page = parseInt(searchParams.get("page") || "1", 10); 
 
-  useNewPostNotification (page, limit);
+  const { data, loading, error, refresh } = useExhibits({ page });
+
+  useNewPostNotification(page, refresh);
   
-  useEffect(() => {
-    dispatch(getExhibits({ page, limit }));
-  }, [page, limit, dispatch]);
-
-
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
+    navigate(`/?page=${value}`);
   };
 
   const handleDeleteExhibit = async (id: number) => {
     await dispatch(deletePost(id));
-    dispatch(getExhibits({ page, limit }));
+    refresh();
   };
 
   return (
     <>
       <ControlBar isAuthenticated={isAuthenticated} />
       <ExhibitsList
-        exhibits={exhibits}
-        dataStatus={dataStatus}
+        exhibits={data?.data}
+        loading={loading}
+        error={error?.message}
         page={page}
-        lastPage={lastPage}
+        lastPage={data?.lastPage || 1}
         onPageChange={handlePageChange}
         onDeleteExhibit={handleDeleteExhibit}
       />

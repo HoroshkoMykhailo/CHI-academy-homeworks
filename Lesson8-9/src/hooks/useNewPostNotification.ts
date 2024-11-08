@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getExhibits } from "~/store/slices/exhibitsSlice";
 import { showNotification } from "~/store/slices/notificationSlice"; 
 import { AppDispatch } from "~/store/store";
 import { socket } from "~/utils/socket"; 
 
 export const useNewPostNotification = (
     page?: number,
-    limit?: number
+    refresh?: () => void,
   ) => {
     const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
@@ -18,8 +17,8 @@ export const useNewPostNotification = (
             severity: "info",
           })
         )
-        if ( page && limit && page === 1) {
-          dispatch(getExhibits({ page, limit }));
+        if ( page && refresh && page === 1) {
+          refresh();
         }
       };
   
@@ -28,5 +27,5 @@ export const useNewPostNotification = (
       return () => {
         socket.off("newPost", handleNewPost);
       };
-    }, [dispatch, page, limit]);
+    }, [dispatch, page]);
   };

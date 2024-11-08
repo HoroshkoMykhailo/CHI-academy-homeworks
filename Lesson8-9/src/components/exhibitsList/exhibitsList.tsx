@@ -3,73 +3,73 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { Post, Pagination } from "~/components/components";
 import { Colors, HeaderHeight } from "~/constants/constants";
 import { Exhibit } from "~/types/types";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "~/store/store";
+import { RootState } from "~/store/store";
+import { useSelector } from "react-redux";
 
 interface ExhibitsListProps {
-  exhibits: Exhibit[];
-  dataStatus: string;
+  exhibits: Exhibit[] | undefined;
+  loading: boolean;
   page: number;
   lastPage: number;
   onPageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
   onDeleteExhibit: (id: number) => void;
+  error?: string;
 }
 
 const ExhibitsList: React.FC<ExhibitsListProps> = ({
-  exhibits,
-  dataStatus,
+  exhibits = [],
+  loading,
+  error,
   page,
   lastPage,
   onPageChange,
   onDeleteExhibit,
 }) => {
-  const { user } = useSelector((state: RootState) => state.user);
   return (
-  <>
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: `calc(100vh - 2*${HeaderHeight}px)`,
-        overflowY: "auto",
-        pt: 2,
-      }}
-    >
-      {dataStatus === "pending" && (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-          <CircularProgress />
-        </Box>
-      )}
-      {dataStatus === "rejected" && (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-          <Typography color="error">Error loading exhibits.</Typography>
-        </Box>
-      )}
-      {exhibits.length === 0 && dataStatus === "fulfilled" && (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-          <Typography>No exhibits found.</Typography>
-        </Box>
-      )}
-      {dataStatus === "fulfilled" &&
-        exhibits.map((exhibit) => (
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: `calc(100vh - 2*${HeaderHeight}px)`,
+          overflowY: "auto",
+          pt: 2,
+        }}
+      >
+        {loading && (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <CircularProgress />
+          </Box>
+        )}
+        {error && (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <Typography color="error">Error loading exhibits.</Typography>
+          </Box>
+        )}
+        {!loading && exhibits?.length === 0 && !error && (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <Typography>No exhibits found.</Typography>
+          </Box>
+        )}
+        {exhibits?.map((exhibit) => (
           <Box key={exhibit.id} mb={3} width="100%" display="flex" justifyContent="center">
-            <Post ownerId={user?.id} onDelete={onDeleteExhibit} {...exhibit} />
+            <Post onDelete={onDeleteExhibit} {...exhibit} />
           </Box>
         ))}
-    </Box>
-    <Box
-      display="flex"
-      justifyContent="center"
-      pt={2}
-      height={HeaderHeight}
-      sx={{
-        backgroundColor: Colors.backgroundPrimary,
-      }}
-    >
-      <Pagination page={page} lastPage={lastPage} onChange={onPageChange} />
-    </Box>
-  </>
-);
-}
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        pt={2}
+        height={HeaderHeight}
+        sx={{
+          backgroundColor: Colors.backgroundPrimary,
+        }}
+      >
+        <Pagination page={page} lastPage={lastPage} onChange={onPageChange} />
+      </Box>
+    </>
+  );
+};
 
 export { ExhibitsList };

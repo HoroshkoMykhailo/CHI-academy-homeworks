@@ -40,14 +40,24 @@ const CommentStripe: React.FC<CommentStripeProps> = ({ exhibitId, refreshPost })
      
     return (
       <>
-        {loading && <CircularProgress size={24} />}
+        {loading && comments && comments.length === 0 && (
+          <CircularProgress size={24} />
+        )}
         {error && (
           <Typography variant="body2" color="error">
             Failed to load comments.
           </Typography>
         )}
         {comments && comments.length > 0
-          ? comments.map((comment) => <Comment key={comment.id} {...comment} onDelete={() => handleDelete(comment.id)} />)
+          ? comments
+              .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+              .map((comment) => (
+                <Comment
+                  key={comment.id}
+                  {...comment}
+                  onDelete={() => handleDelete(comment.id)}
+                />
+              ))
           : !loading && (
               <Typography variant="body2" color="text.secondary">
                 No comments yet.

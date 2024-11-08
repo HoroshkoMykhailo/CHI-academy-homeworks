@@ -9,11 +9,11 @@ import { AppDispatch, RootState } from "~/store/store";
 import { getExhibitById } from "~/store/slices/exhibitSlice";
 
 interface PostProps extends Exhibit {
-  ownerId: number | undefined;
   onDelete: (id: number) => void;
 }
-const Post: React.FC<PostProps> = ({ ownerId, onDelete, ...exhibit}) => {
+const Post: React.FC<PostProps> = ({ onDelete, ...exhibit}) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.user);
   const [showComments, setShowComments] = useState(false);
   const stExhibit = useSelector((state: RootState) => state.exhibit);
   const [localExhibit, setLocalExhibit] = useState(exhibit);
@@ -63,7 +63,7 @@ const Post: React.FC<PostProps> = ({ ownerId, onDelete, ...exhibit}) => {
           >
             {showComments ? "Hide comments" : "Open comments"}
           </Button>
-          {ownerId === exhibit.user.id && (
+          { user?.id === exhibit.user.id && (
             <IconButton
               aria-label="delete post"
               onClick={() => onDelete(exhibit.id)}
