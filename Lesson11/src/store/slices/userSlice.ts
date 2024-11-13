@@ -1,3 +1,4 @@
+'use client';
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios, { Axios } from "axios";
 import { fetchUser, loginUser, registerUser } from "~/api/userActions";
@@ -38,8 +39,11 @@ interface UserState {
 }
 
 const getInitialState = async () => {
-  const token = localStorage.getItem('token');
+  let token: string | null = null;
   let error: string = '';
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('token');
+  }
   if (token) {
     try{
       const user = await fetchUser();
@@ -56,7 +60,7 @@ const getInitialState = async () => {
       error = error.message as string;
     }
   }
-
+  
   return {
       user: null,
       dataStatus: DataStatus.IDLE,

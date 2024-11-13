@@ -1,34 +1,34 @@
+'use client';
 import React from 'react';
 import { AppBar, Toolbar, Box } from '@mui/material';
 import { AppRoute, Colors, HeaderHeight } from '~/constants/constants';
 import './controlBar.css';
 import { CustomButton } from '~/components/components';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '~/store/slices/userSlice';
-import { AppDispatch } from '~/store/store';
+import { AppDispatch, RootState } from '~/store/store';
 
 interface ControlBarProps {
-  isAuthenticated: boolean;
   myPosts?: boolean;
 }
 
 const ControlBar: React.FC<ControlBarProps> = ({
-  isAuthenticated,
   myPosts=false
 }) => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
 
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const onLogout = () => {
     dispatch(logout());
-    navigate(AppRoute.LOGIN);
+    router.push(AppRoute.LOGIN);
   }
 
   const handleLogin = () => {
-    navigate(AppRoute.LOGIN);
+    router.push(AppRoute.LOGIN);
   };
 
   return (

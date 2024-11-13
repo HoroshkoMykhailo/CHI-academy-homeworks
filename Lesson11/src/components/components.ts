@@ -12,3 +12,4 @@ export { FormComponent } from "./formComponent/formComponent";
 export { CustomAlert } from "./customAlert/customAlert";
 export { ExhibitsList } from "./exhibitsList/exhibitsList";
 export { NewPostForm } from "./newPostForm/newPostForm";
+export { PostActions } from "./postActions/postActions";

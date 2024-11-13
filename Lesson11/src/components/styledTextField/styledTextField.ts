@@ -1,3 +1,4 @@
+'use client';
 import { styled, TextField } from "@mui/material";
 import { Colors } from "~/constants/constants";
 

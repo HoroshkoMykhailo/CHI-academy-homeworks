@@ -1,3 +1,4 @@
+'use client';
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useRequest } from "ahooks";
 import React, { useEffect } from "react";

@@ -1,3 +1,4 @@
+'use client';
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";

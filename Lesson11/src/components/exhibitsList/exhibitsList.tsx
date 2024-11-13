@@ -1,29 +1,19 @@
 import React from "react";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Post, Pagination } from "~/components/components";
 import { Colors, HeaderHeight } from "~/constants/constants";
 import { Exhibit } from "~/types/types";
-import { RootState } from "~/store/store";
-import { useSelector } from "react-redux";
 
 interface ExhibitsListProps {
-  exhibits: Exhibit[] | undefined;
-  loading: boolean;
+  exhibits: Exhibit[];
   page: number;
   lastPage: number;
-  onPageChange: (event: React.ChangeEvent<unknown>, value: number) => void;
-  onDeleteExhibit: (id: number) => void;
-  error?: string;
 }
 
 const ExhibitsList: React.FC<ExhibitsListProps> = ({
   exhibits = [],
-  loading,
-  error,
   page,
   lastPage,
-  onPageChange,
-  onDeleteExhibit,
 }) => {
   return (
     <>
@@ -36,24 +26,14 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
           pt: 2,
         }}
       >
-        {loading && (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-            <CircularProgress />
-          </Box>
-        )}
-        {error && (
-          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-            <Typography color="error">Error loading exhibits.</Typography>
-          </Box>
-        )}
-        {!loading && exhibits?.length === 0 && !error && (
+        {exhibits.length === 0  && (
           <Box display="flex" justifyContent="center" alignItems="center" height="100%">
             <Typography>No exhibits found.</Typography>
           </Box>
         )}
-        {!loading && exhibits?.map((exhibit) => (
+        {exhibits.map((exhibit) => (
           <Box key={exhibit.id} mb={3} width="100%" display="flex" justifyContent="center">
-            <Post onDelete={onDeleteExhibit} {...exhibit} />
+            <Post {...exhibit} />
           </Box>
         ))}
       </Box>
@@ -66,7 +46,7 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
           backgroundColor: Colors.backgroundPrimary,
         }}
       >
-        <Pagination page={page} lastPage={lastPage} onChange={onPageChange} />
+        {/* <Pagination page={page} lastPage={lastPage} onChange={onPageChange} /> */}
       </Box>
     </>
   );

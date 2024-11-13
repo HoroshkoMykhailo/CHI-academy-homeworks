@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import { Button, SxProps, Typography } from "@mui/material";
 import { Colors } from "~/constants/constants";
