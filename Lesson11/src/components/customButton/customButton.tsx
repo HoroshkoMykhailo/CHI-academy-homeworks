@@ -2,7 +2,8 @@
 import React from "react";
 import { Button, SxProps, Typography } from "@mui/material";
 import { Colors } from "~/constants/constants";
-import { Link } from "react-router-dom";
+import Link from 'next/link';
+
 
 interface CustomButtonProps {
     children: React.ReactNode;
@@ -29,7 +30,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     <Button
       onClick={onClick}
       component={link ? Link : "button"}
-      to={link ? link : undefined}
+      href={link ? link : undefined}
       disabled={disabled}
       sx={{
         backgroundColor: Colors.buttonColor,

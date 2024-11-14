@@ -1,4 +1,3 @@
-'use client'
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '~/store/slices/userSlice';
 import notificationReducer from '~/store/slices/notificationSlice';

@@ -46,7 +46,7 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
           backgroundColor: Colors.backgroundPrimary,
         }}
       >
-        {/* <Pagination page={page} lastPage={lastPage} onChange={onPageChange} /> */}
+        <Pagination page={page} lastPage={lastPage} />
       </Box>
     </>
   );

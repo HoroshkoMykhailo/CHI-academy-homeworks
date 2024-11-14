@@ -1,24 +1,23 @@
 import React from 'react';
 import { Pagination as MuiPagination, PaginationItem } from '@mui/material';
-import { LastPage } from '@mui/icons-material';
+import Link from 'next/link';
 
 interface PaginationProps {
   page: number;
   lastPage: number;
-  onChange: (event: React.ChangeEvent<unknown>, value: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ page, lastPage, onChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ page, lastPage }) => {
+  const paginationItems = Array.from({ length: lastPage }, (_, index) => index + 1);
   return (
-    <MuiPagination
-      count={lastPage}
-      page={page}
-      onChange={onChange}
-      variant="outlined"
-      color="primary"
-      renderItem={(item) => (
+    <div>
+      {paginationItems.map((item) => (
         <PaginationItem
-          {...item}
+          key={item}
+          component={Link}
+          href={`/?page=${item}`}
+          page={item}
+          selected={item === page}
           sx={{
             backgroundColor: '#BCE784',
             color: '#313638',
@@ -31,9 +30,9 @@ const Pagination: React.FC<PaginationProps> = ({ page, lastPage, onChange }) => 
             },
           }}
         />
-      )}
-    />
+      ))}
+    </div>
   );
 };
 
-export { Pagination }
+export { Pagination };

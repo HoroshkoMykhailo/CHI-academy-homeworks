@@ -17,7 +17,6 @@ const ControlBar: React.FC<ControlBarProps> = ({
   myPosts=false
 }) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
-
   const router = useRouter();
 
   const dispatch = useDispatch<AppDispatch>();

@@ -1,6 +1,5 @@
-'use client';
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { fetchUser, loginUser, registerUser } from "~/api/userActions";
 import { DataStatus } from "~/constants/constants";
 import { loginUserResponse, registerUserResponse, User, UserRequest } from "~/types/types";

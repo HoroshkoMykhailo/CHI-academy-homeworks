@@ -1,11 +1,15 @@
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "~/styles/styles.css";
+import { CustomAlert } from "~/components/components";
 import { Provider } from "react-redux";
 import { store } from "~/store/store";
-import { CustomAlert } from "~/components/components";
 
-export default function RootLayout({ children } : { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <head>
@@ -16,8 +20,8 @@ export default function RootLayout({ children } : { children: React.ReactNode })
       </head>
       <body>
         <Provider store={store}>
-          {children}
-          <CustomAlert />
+            {children}
+            <CustomAlert />
         </Provider>
       </body>
     </html>

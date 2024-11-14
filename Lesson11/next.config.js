@@ -11,14 +11,6 @@ const envKeys = Object.keys(env || {}).reduce((prev, next) => {
 module.exports = {
   reactStrictMode: true,
   webpack: (config, { isServer, webpack }) => {
-    if (!isServer) {
-      config.ignoreWarnings = [
-        {
-          message: /topLevelAwait/,
-        },
-      ];
-    }
-
     config.plugins.push(new webpack.DefinePlugin(envKeys));
 
     config.resolve.plugins = config.resolve.plugins || [];

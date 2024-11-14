@@ -1,16 +1,16 @@
-'use client'
-import React, { useEffect, useState } from "react";
+'use client';
+import React, { useEffect } from "react";
 import { FormComponent } from "~/components/components";
-import { useNavigate } from "react-router-dom";
 import { AppRoute, DataStatus } from "~/constants/constants";
 import { UserRequest } from "~/types/types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/store/store";
 import { login } from "~/store/slices/userSlice";
 import { showNotification } from "~/store/slices/notificationSlice";
+import { useRouter } from "next/navigation";
 
 const LoginForm: React.FC = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { isAuthenticated, dataStatus, message } = useSelector((state: RootState) => state.user);
 
@@ -20,9 +20,9 @@ const LoginForm: React.FC = () => {
 
     useEffect(() => {
       if (isAuthenticated) {
-        navigate(AppRoute.STRIPE);
+        router.push(AppRoute.STRIPE);
       }
-    }, [isAuthenticated, navigate]);
+    }, [isAuthenticated, router]);
 
     useEffect(() => {
       if (dataStatus === DataStatus.REJECTED) {
@@ -37,7 +37,7 @@ const LoginForm: React.FC = () => {
         <FormComponent
           buttonLabel="Login"
           linkText="Don't have an account? Register"
-          onLinkClick={() => navigate(AppRoute.REGISTER)}
+          onLinkClick={() => router.push(AppRoute.REGISTER)}
           onSubmit={handleLogin}
         />
     );
