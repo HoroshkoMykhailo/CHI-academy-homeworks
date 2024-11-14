@@ -1,16 +1,16 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { FormComponent } from "~/components/components";
-import { useNavigate } from "react-router-dom";
 import { AppRoute, DataStatus } from "~/constants/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { UserRequest } from "~/types/types";
 import { register } from "~/store/slices/userSlice";
 import { AppDispatch, RootState } from "~/store/store";
 import { showNotification } from "~/store/slices/notificationSlice";
+import { useRouter } from "next/navigation";
 
 const RegisterForm: React.FC = () => {
-    const navigate = useNavigate();
+    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { dataStatus, message } = useSelector((state: RootState) => state.user);
     const [isRegistered, setIsRegistered] = useState(false);
@@ -38,7 +38,7 @@ const RegisterForm: React.FC = () => {
           message: message,
           severity: "success",
         }));
-        navigate(AppRoute.LOGIN);
+        router.push(AppRoute.LOGIN);
       }
     }, [isRegistered]);
     
@@ -46,7 +46,7 @@ const RegisterForm: React.FC = () => {
       <FormComponent
         buttonLabel="Register"
         linkText="Already have an account? Login"
-        onLinkClick={() => navigate(AppRoute.LOGIN)}
+        onLinkClick={() => router.push(AppRoute.LOGIN)}
         onSubmit={handleRegister}
       />
     );

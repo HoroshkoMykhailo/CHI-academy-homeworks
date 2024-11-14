@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '~/store/slices/userSlice';
 import { AppDispatch, RootState } from '~/store/store';
+import { useNewPostNotification } from '~/hooks/hooks';
 
 interface ControlBarProps {
   myPosts?: boolean;
@@ -23,6 +24,8 @@ const ControlBar: React.FC<ControlBarProps> = ({ myPosts = false }) => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+  
+  useNewPostNotification();
   
   const onLogout = () => {
     dispatch(logout());

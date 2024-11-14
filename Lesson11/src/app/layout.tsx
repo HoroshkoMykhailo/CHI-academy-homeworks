@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "~/styles/styles.css";
 import { CustomAlert } from "~/components/components";
 import { Provider } from "react-redux";

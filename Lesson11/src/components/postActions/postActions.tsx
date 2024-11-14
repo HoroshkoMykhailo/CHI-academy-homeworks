@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, IconButton, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Exhibit } from "~/types/types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { CommentStripe } from "../components";
@@ -17,6 +17,11 @@ const PostActions: React.FC<Exhibit> = (exhibit) => {
   const [showComments, setShowComments] = useState(false);
   const router = useRouter();
   const formattedDate = format(new Date(exhibit.createdAt), 'dd.MM.yyyy');
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const { data: localExhibit, run: refreshExhibit } = useRequest(
     fetchExhibitById,
@@ -65,7 +70,7 @@ const PostActions: React.FC<Exhibit> = (exhibit) => {
         >
           {showComments ? "Hide comments" : "Open comments"}
         </Button>
-        {user?.id === exhibit.user.id && (
+        {isClient &&user?.id === exhibit.user.id && (
           <IconButton
             aria-label="delete post"
             onClick={() => onDelete(exhibit.id)}
