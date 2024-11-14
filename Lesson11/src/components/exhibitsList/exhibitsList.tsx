@@ -5,7 +5,7 @@ import { Colors, HeaderHeight } from "~/constants/constants";
 import { Exhibit } from "~/types/types";
 
 interface ExhibitsListProps {
-  exhibits: Exhibit[];
+  exhibits: Exhibit[] | undefined;
   page: number;
   lastPage: number;
 }

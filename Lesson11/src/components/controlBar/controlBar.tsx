@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, Box } from '@mui/material';
 import { AppRoute, Colors, HeaderHeight } from '~/constants/constants';
 import './controlBar.css';
@@ -13,44 +13,57 @@ interface ControlBarProps {
   myPosts?: boolean;
 }
 
-const ControlBar: React.FC<ControlBarProps> = ({
-  myPosts=false
-}) => {
+const ControlBar: React.FC<ControlBarProps> = ({ myPosts = false }) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const router = useRouter();
-
   const dispatch = useDispatch<AppDispatch>();
 
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
   const onLogout = () => {
     dispatch(logout());
     router.push(AppRoute.LOGIN);
-  }
+  };
 
   const handleLogin = () => {
     router.push(AppRoute.LOGIN);
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: Colors.backgroundPrimary, height: HeaderHeight }}>
+    <AppBar
+      position="static"
+      sx={{ backgroundColor: Colors.backgroundPrimary, height: HeaderHeight }}
+    >
       <Toolbar>
         <Box className="controlContainer">
-        {isAuthenticated ? (
-          <>
-            <CustomButton width={120} onClick={onLogout}>
-              Logout
-            </CustomButton >
-            <CustomButton width={220} link={myPosts ? AppRoute.STRIPE : AppRoute.HOME}>
-              {myPosts ? 'To Stripe' : 'My Posts'}
+          {isAuthenticated && isMounted ? (
+            <>
+              <CustomButton width={120} onClick={onLogout}>
+                Logout
+              </CustomButton>
+              <CustomButton
+                width={220}
+                link={myPosts ? AppRoute.STRIPE : AppRoute.HOME}
+              >
+                {myPosts ? "To Stripe" : "My Posts"}
+              </CustomButton>
+              <CustomButton
+                width={120}
+                fontSize={"2rem"}
+                link={AppRoute.NEW_POST}
+              >
+                +
+              </CustomButton>
+            </>
+          ) : (
+            <CustomButton width={120} onClick={handleLogin}>
+              Login
             </CustomButton>
-            <CustomButton width={120} fontSize={"2rem"} link={AppRoute.NEW_POST}>
-              +
-            </CustomButton>
-          </>
-        ) : (
-          <CustomButton width={120} onClick={handleLogin}>
-            Login
-          </CustomButton>
-        )}
+          )}
         </Box>
       </Toolbar>
     </AppBar>

@@ -1,8 +1,7 @@
+'use client';
 import React from "react";
-
 import { Box } from "@mui/material";
 import { RegisterForm } from "~/components/components";
-import { UserRequest } from "~/types/types";
 
 const RegisterPage: React.FC = () => {
   return (
@@ -20,4 +19,4 @@ const RegisterPage: React.FC = () => {
   );
 };
 
-export { RegisterPage };
+export default RegisterPage;

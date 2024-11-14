@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { NewPostForm } from "~/components/components";
@@ -5,11 +6,11 @@ import { AppRoute } from "~/constants/constants";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "~/store/store";
 import { showNotification } from "~/store/slices/notificationSlice";
-import { useNavigate } from "react-router-dom";
 import { useCreateExhibit } from "~/hooks/hooks";
+import { useRouter } from "next/navigation";
 
 const NewPost: React.FC = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -38,7 +39,7 @@ const NewPost: React.FC = () => {
   useEffect(() => {
     if (!loading) {
       if (data && !error) {
-        navigate(AppRoute.STRIPE);
+        router.push(AppRoute.STRIPE);
       } else if (error) {
         dispatch(
           showNotification({
@@ -69,4 +70,4 @@ const NewPost: React.FC = () => {
   );
 }
 
-export { NewPost }
+export default NewPost;
