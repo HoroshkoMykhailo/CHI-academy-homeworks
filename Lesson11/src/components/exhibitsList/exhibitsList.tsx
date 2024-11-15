@@ -8,12 +8,14 @@ interface ExhibitsListProps {
   exhibits: Exhibit[] | undefined;
   page: number;
   lastPage: number;
+  error?: string;
 }
 
 const ExhibitsList: React.FC<ExhibitsListProps> = ({
   exhibits = [],
   page,
   lastPage,
+  error,
 }) => {
   return (
     <>
@@ -26,12 +28,17 @@ const ExhibitsList: React.FC<ExhibitsListProps> = ({
           pt: 2,
         }}
       >
-        {exhibits.length === 0  && (
+        {error && (
+          <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+            <Typography color="error">Error loading exhibits.</Typography>
+          </Box>
+        )}
+        {exhibits.length === 0  && !error && (
           <Box display="flex" justifyContent="center" alignItems="center" height="100%">
             <Typography>No exhibits found.</Typography>
           </Box>
         )}
-        {exhibits.map((exhibit) => (
+        {!error && exhibits.map((exhibit) => (
           <Box key={exhibit.id} mb={3} width="100%" display="flex" justifyContent="center">
             <Post {...exhibit} />
           </Box>

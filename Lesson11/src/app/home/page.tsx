@@ -23,6 +23,7 @@ const HomePage: React.FC = () => {
         exhibits={data?.data}
         page={pageNumber}
         lastPage={data?.lastPage || 1}
+        error={error?.message}
       />
     </>
   );
