@@ -1,13 +1,12 @@
 import { Request, Response } from 'express';
-import { readUsersFromFile, writeUsersToFile } from '../utils/fileHandler';
-import { User } from '../types/User';
+import { getUsers, createUser, updateUser, deleteUser } from '../services/userService';
 
-export const getUsers = (req: Request, res: Response): void => {
-    const users = readUsersFromFile();
+export const getUsersHandler = (req: Request, res: Response): void => {
+    const users = getUsers();
     res.json(users);
 };
 
-export const createUser = (req: Request, res: Response): void => {
+export const createUserHandler = (req: Request, res: Response): void => {
     const { user, email } = req.body;
 
     if (!user || !email) {
@@ -15,52 +14,39 @@ export const createUser = (req: Request, res: Response): void => {
         return;
     }
 
-    const users = readUsersFromFile();
-    const newUser: User = { id: Date.now(), user, email };
+    const newUser = createUser({ user, email });
 
-    if(users.some(user => user.email === email)) {
+    if (!newUser) {
         res.status(400).json({ error: 'User with this email already exists' });
         return;
     }
 
-    users.push(newUser);
-    writeUsersToFile(users);
-
     res.status(201).json(newUser);
 };
 
-export const updateUser = (req: Request, res: Response): void => {
+export const updateUserHandler = (req: Request, res: Response): void => {
     const { id } = req.params;
     const { user, email } = req.body;
 
-    const users = readUsersFromFile();
-    const userIndex = users.findIndex((u) => u.id === Number(id));
+    const updatedUser = updateUser(Number(id), { user, email });
 
-    if (userIndex === -1) {
+    if (!updatedUser) {
         res.status(404).json({ error: 'User not found' });
         return;
     }
 
-    if (user) users[userIndex].user = user;
-    if (email) users[userIndex].email = email;
-
-    writeUsersToFile(users);
-
-    res.json(users[userIndex]);
+    res.json(updatedUser);
 };
 
-export const deleteUser = (req: Request, res: Response): void => {
+export const deleteUserHandler = (req: Request, res: Response): void => {
     const { id } = req.params;
 
-    const users = readUsersFromFile();
-    const updatedUsers = users.filter((u) => u.id !== Number(id));
+    const isDeleted = deleteUser(Number(id));
 
-    if (users.length === updatedUsers.length) {
+    if (!isDeleted) {
         res.status(404).json({ error: 'User not found' });
         return;
     }
-
-    writeUsersToFile(updatedUsers);
 
     res.status(204).send();
 };
