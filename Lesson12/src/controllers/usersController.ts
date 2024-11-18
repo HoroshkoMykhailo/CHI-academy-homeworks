@@ -48,3 +48,19 @@ export const updateUser = (req: Request, res: Response): void => {
 
     res.json(users[userIndex]);
 };
+
+export const deleteUser = (req: Request, res: Response): void => {
+    const { id } = req.params;
+
+    const users = readUsersFromFile();
+    const updatedUsers = users.filter((u) => u.id !== Number(id));
+
+    if (users.length === updatedUsers.length) {
+        res.status(404).json({ error: 'User not found' });
+        return;
+    }
+
+    writeUsersToFile(updatedUsers);
+
+    res.status(204).send();
+};
