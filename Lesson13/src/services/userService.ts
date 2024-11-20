@@ -1,49 +1,39 @@
-import { User } from '../types/User';
-import { readUsersFromFile, writeUsersToFile } from '../utils/fileHandler';
 
-export const getUsers = (): User[] => {
-    return readUsersFromFile();
+import { User } from '../model/User';
+import AppDataSource from '../ormconfig';
+
+const userRepository = AppDataSource.getRepository(User);
+
+export const getUsers = async (): Promise<User[]> => {
+    return await userRepository.find();
 };
 
-export const createUser = (userData: { user: string; email: string }): User | null => {
-    const users = readUsersFromFile();
-
-    if (users.some((user) => user.email === userData.email)) {
+export const createUser = async (userData: { user: string; email: string }): Promise<User | null> => {
+    const existingUser = await userRepository.findOneBy({ email: userData.email });
+    if (existingUser) {
         return null;
     }
 
-    const newUser: User = { id: Date.now(), ...userData };
-    users.push(newUser);
-    writeUsersToFile(users);
-
-    return newUser;
+    const newUser = userRepository.create(userData);
+    return await userRepository.save(newUser);
 };
 
-export const updateUser = (id: number, userData: { user?: string; email?: string }): User | null => {
-    const users = readUsersFromFile();
-    const userIndex = users.findIndex((user) => user.id === id);
-
-    if (userIndex === -1) {
+export const updateUser = async (
+    id: number,
+    userData: { user?: string; email?: string }
+): Promise<User | null> => {
+    const user = await userRepository.findOneBy({ id });
+    if (!user) {
         return null;
     }
 
-    if (userData.user) users[userIndex].user = userData.user;
-    if (userData.email) users[userIndex].email = userData.email;
+    if (userData.user) user.user = userData.user;
+    if (userData.email) user.email = userData.email;
 
-    writeUsersToFile(users);
-
-    return users[userIndex];
+    return await userRepository.save(user);
 };
 
-export const deleteUser = (id: number): boolean => {
-    const users = readUsersFromFile();
-    const updatedUsers = users.filter((user) => user.id !== id);
-
-    if (users.length === updatedUsers.length) {
-        return false;
-    }
-
-    writeUsersToFile(updatedUsers);
-
-    return true;
+export const deleteUser = async (id: number): Promise<boolean> => {
+    const deleteResult = await userRepository.delete(id);
+    return deleteResult.affected !== 0;
 };
