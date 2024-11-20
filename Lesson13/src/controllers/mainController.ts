@@ -1,5 +1,9 @@
-import { Request, Response } from 'express';
+import { JsonController, Get } from 'routing-controllers';
 
-export const getAuthor = (req: Request, res: Response): void => {
-    res.json({ author : "Mykhailo Horoshko"});
+@JsonController('/')
+export class MainController {
+    @Get('/')
+    getAuthor(): { author: string } {
+        return { author: 'Mykhailo Horoshko' };
+    }
 }

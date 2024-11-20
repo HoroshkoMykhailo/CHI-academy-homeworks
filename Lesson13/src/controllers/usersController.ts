@@ -1,52 +1,49 @@
-import { Request, Response } from 'express';
-import { getUsers, createUser, updateUser, deleteUser } from '../services/userService';
+import { JsonController, Get, Post, Patch, Delete, Param, Body, HttpCode, NotFoundError, HttpError, OnUndefined } from 'routing-controllers';
+import { User } from '../model/User';
+import { validateUser } from '../helpers/validateUser';
+import { ValidateArgs } from '../decorators/validateArgs';
+import { UserService } from '../services/userService';
 
-export const getUsersHandler = async (req: Request, res: Response): Promise<void> => {
-    const users = await getUsers();
-    res.json(users);
-};
+@JsonController("/users")
+export class UserController {
+  private userService = new UserService();
 
-export const createUserHandler = async (req: Request, res: Response): Promise<void> => {
-    const { user, email } = req.body;
+  @Get("/")
+  async getAll(): Promise<User[]> {
+    return await this.userService.getUsers();
+  }
 
-    if (!user || !email) {
-        res.status(400).json({ error: 'User and email are required' });
-        return;
-    }
-
-    const newUser = await createUser({ user, email });
-
+  @Post("/")
+  @HttpCode(201)
+  @ValidateArgs(validateUser)
+  async create(@Body() userData: User): Promise<User | { error: string; }> {
+    const newUser = await this.userService.createUser(userData);
     if (!newUser) {
-        res.status(400).json({ error: 'User with this email already exists' });
-        return;
+      throw new HttpError(400, "User with this email already exists");
     }
 
-    res.status(201).json(newUser);
-};
+    return newUser;
+  }
 
-export const updateUserHandler = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const { user, email } = req.body;
-
-    const updatedUser = await updateUser(Number(id), { user, email });
-
+  @Patch("/:id")
+  @ValidateArgs(validateUser)
+  async update(
+    @Body() userData: User,
+    @Param("id") id: number
+  ): Promise<User | { error: string; }> {
+    const updatedUser = await this.userService.updateUser(id, userData);
     if (!updatedUser) {
-        res.status(404).json({ error: 'User not found' });
-        return;
+        throw new NotFoundError("User not found");
     }
+    return updatedUser;
+  }
 
-    res.json(updatedUser);
-};
-
-export const deleteUserHandler = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-
-    const isDeleted = await deleteUser(Number(id));
-
+  @Delete("/:id")
+  @OnUndefined(204)
+  async remove(@Param("id") id: number) {
+    const isDeleted = await this.userService.deleteUser(id);
     if (!isDeleted) {
-        res.status(404).json({ error: 'User not found' });
-        return;
+      throw new NotFoundError("User not found");
     }
-
-    res.status(204).send();
-};
+  }
+}

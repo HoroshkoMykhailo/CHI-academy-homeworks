@@ -1,16 +1,15 @@
-import express from "express";
-import { getAuthor } from "./controllers/mainController";
-import usersRoutes from "./routes/userRoutes";
+import { MainController } from "./controllers/mainController";
 import AppDataSource from "./ormconfig";
+import { createExpressServer } from "routing-controllers";
+import { UserController } from "./controllers/usersController";
 
 
-const app = express();
+
 const port = 3000;
 
-app.use(express.json());
-
-app.get('/', getAuthor);
-app.use('/users', usersRoutes);
+const app = createExpressServer({
+    controllers: [MainController, UserController], 
+});
 
 AppDataSource.initialize()
   .then(() => {
