@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dbconfig = void 0;
+const exhibit_entity_1 = require("./exhibits/exhibit.entity");
 const user_entity_1 = require("./users/user.entity");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -12,6 +13,6 @@ exports.dbconfig = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     synchronize: process.env.DB_SYNCHRONIZE === "true",
-    entities: [user_entity_1.User],
+    entities: [user_entity_1.User, exhibit_entity_1.Exhibit],
 };
 //# sourceMappingURL=db.config.js.map

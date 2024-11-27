@@ -13,6 +13,7 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
+const exhibit_entity_1 = require("../exhibits/exhibit.entity");
 let User = class User {
 };
 exports.User = User;
@@ -37,6 +38,11 @@ __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isAdmin", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => exhibit_entity_1.Exhibit, (exhibit) => exhibit.user, { cascade: true }),
+    (0, swagger_1.ApiProperty)({ type: () => [exhibit_entity_1.Exhibit], description: 'List of exhibits, created by user' }),
+    __metadata("design:type", Array)
+], User.prototype, "exhibits", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

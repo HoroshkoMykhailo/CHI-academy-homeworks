@@ -1,3 +1,4 @@
+import { Exhibit } from "./exhibits/exhibit.entity";
 import { User } from "./users/user.entity";
 export declare const dbconfig: {
     type: string;
@@ -7,5 +8,5 @@ export declare const dbconfig: {
     password: string;
     database: string;
     synchronize: boolean;
-    entities: (typeof User)[];
+    entities: (typeof Exhibit | typeof User)[];
 };
