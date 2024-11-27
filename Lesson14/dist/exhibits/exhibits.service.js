@@ -24,19 +24,20 @@ let ExhibitsService = class ExhibitsService {
     constructor(exhibitsRepository) {
         this.exhibitsRepository = exhibitsRepository;
     }
-    async getExhibits({ page, limit }) {
+    async getExhibitsWithPagination(page, limit, where = {}) {
         const skip = (page - 1) * limit;
         return await this.exhibitsRepository.findAndCount({
+            where,
             take: limit,
             skip,
             order: {
-                createdAt: 'DESC',
-            }
+                createdAt: "DESC",
+            },
         });
     }
     async createExhibit(file, description, userId) {
         const uniqueFileName = `${(0, uuid_1.v4)()}${path.extname(file.originalname)}`;
-        const uploadFolder = path.join(__dirname, '../../static');
+        const uploadFolder = path.join(__dirname, "../../static");
         if (!fs.existsSync(uploadFolder)) {
             fs.mkdirSync(uploadFolder, { recursive: true });
         }
@@ -48,6 +49,19 @@ let ExhibitsService = class ExhibitsService {
             userId,
         });
         return await this.exhibitsRepository.save(exhibit);
+    }
+    async getExhibitById(id) {
+        return await this.exhibitsRepository.findOneBy({ id });
+    }
+    async deleteExhibitById(id, userId) {
+        const exhibit = await this.exhibitsRepository.findOne({ where: { id } });
+        if (!exhibit) {
+            throw new common_1.NotFoundException("Exhibit not found");
+        }
+        if (exhibit.userId !== userId) {
+            throw new common_1.UnauthorizedException("You are not authorized to delete this exhibit");
+        }
+        await this.exhibitsRepository.remove(exhibit);
     }
 };
 exports.ExhibitsService = ExhibitsService;

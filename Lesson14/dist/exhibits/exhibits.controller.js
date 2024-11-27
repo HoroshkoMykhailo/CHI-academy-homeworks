@@ -26,10 +26,7 @@ let ExhibitsController = class ExhibitsController {
         this.exhibitsService = exhibitsService;
     }
     async getExhibits(page = 1, limit = 10) {
-        const [exhibits, total] = await this.exhibitsService.getExhibits({
-            page,
-            limit,
-        });
+        const [exhibits, total] = await this.exhibitsService.getExhibitsWithPagination(page, limit);
         if (!exhibits.length) {
             throw new common_1.NotFoundException("Exhibits not found");
         }
@@ -48,6 +45,31 @@ let ExhibitsController = class ExhibitsController {
         }
         const exhibit = await this.exhibitsService.createExhibit(file, description, req.user.id);
         return (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibit, { excludeExtraneousValues: true });
+    }
+    async getExhibitById(id) {
+        const exhibit = await this.exhibitsService.getExhibitById(id);
+        if (!exhibit) {
+            throw new common_1.NotFoundException("Exhibit not found");
+        }
+        return (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibit, { excludeExtraneousValues: true });
+    }
+    async getMyExhibits(page = 1, limit = 10, req) {
+        const [exhibits, total] = await this.exhibitsService.getExhibitsWithPagination(page, limit, { userId: req.user.id });
+        if (!exhibits.length) {
+            throw new common_1.NotFoundException("Exhibits not found");
+        }
+        return {
+            exhibits: (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibits, {
+                excludeExtraneousValues: true,
+            }),
+            total,
+            page,
+            lastPage: Math.ceil(total / limit),
+        };
+    }
+    async deleteExhibit(id, req) {
+        await this.exhibitsService.deleteExhibitById(id, req.user.id);
+        return { message: "Exhibit successfully deleted" };
     }
 };
 exports.ExhibitsController = ExhibitsController;
@@ -93,6 +115,47 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], ExhibitsController.prototype, "createExhibit", null);
+__decorate([
+    (0, common_1.Get)("post/:id"),
+    (0, swagger_1.ApiOperation)({ summary: "Exhibit details" }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: "Successful response" }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: "Exhibit not found" }),
+    __param(0, (0, common_1.Param)("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ExhibitsController.prototype, "getExhibitById", null);
+__decorate([
+    (0, common_1.Get)("my-posts"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)("access-token"),
+    (0, swagger_1.ApiOperation)({ summary: "My exhibits" }),
+    (0, swagger_1.ApiQuery)({ name: "page", required: false, description: "Page number" }),
+    (0, swagger_1.ApiQuery)({ name: "limit", required: false, description: "Items per page" }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: "Successful response" }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: "Unauthorized" }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: "Exhibits not found" }),
+    __param(0, (0, common_1.Query)("page")),
+    __param(1, (0, common_1.Query)("limit")),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:returntype", Promise)
+], ExhibitsController.prototype, "getMyExhibits", null);
+__decorate([
+    (0, common_1.Delete)(":id"),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)("access-token"),
+    (0, swagger_1.ApiOperation)({ summary: "Exhibit deletion" }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: "Exhibit successfully deleted" }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: "Unauthorized" }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: "Exhibit not found" }),
+    __param(0, (0, common_1.Param)("id")),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], ExhibitsController.prototype, "deleteExhibit", null);
 exports.ExhibitsController = ExhibitsController = __decorate([
     (0, common_1.Controller)("exhibits"),
     __metadata("design:paramtypes", [exhibits_service_1.ExhibitsService])

@@ -12,4 +12,14 @@ export declare class ExhibitsController {
     createExhibit({ description }: {
         description: string;
     }, file: Express.Multer.File, req: any): Promise<Exhibit>;
+    getExhibitById(id: number): Promise<Exhibit>;
+    getMyExhibits(page: number, limit: number, req: any): Promise<{
+        exhibits: Exhibit[];
+        total: number;
+        page: number;
+        lastPage: number;
+    }>;
+    deleteExhibit(id: number, req: any): Promise<{
+        message: string;
+    }>;
 }
