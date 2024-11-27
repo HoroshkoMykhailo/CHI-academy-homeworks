@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DemoProtectedRouteController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
-const common_2 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 let DemoProtectedRouteController = class DemoProtectedRouteController {
     getProtectedInfo() {
@@ -24,7 +23,7 @@ let DemoProtectedRouteController = class DemoProtectedRouteController {
 exports.DemoProtectedRouteController = DemoProtectedRouteController;
 __decorate([
     (0, common_1.Get)(),
-    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, swagger_1.ApiOperation)({ summary: 'Get protected info' }),
     __metadata("design:type", Function),

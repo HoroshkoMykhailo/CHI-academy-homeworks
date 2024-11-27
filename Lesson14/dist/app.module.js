@@ -18,7 +18,8 @@ let AppModule = class AppModule {
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot({
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot({
                 ...db_config_1.dbconfig,
                 type: 'postgres',
             }),

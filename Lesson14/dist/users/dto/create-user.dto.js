@@ -17,11 +17,13 @@ class CreateUserDto {
 exports.CreateUserDto = CreateUserDto;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'username', description: 'username for registration' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Username is required' }),
     (0, class_validator_1.MinLength)(4, { message: 'Username has to be longer than 4 characters' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "username", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'password123', description: 'User password' }),
+    (0, swagger_1.ApiProperty)({ example: 'password', description: 'User password' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password is required' }),
     (0, class_validator_1.MinLength)(4, { message: 'Password has to be longer than 4 characters' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);

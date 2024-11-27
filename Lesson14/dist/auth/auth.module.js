@@ -15,6 +15,8 @@ const auth_controller_1 = require("./auth.controller");
 const users_module_1 = require("../users/users.module");
 const jwt_strategy_1 = require("./jwt.strategy");
 const jwt_auth_guard_1 = require("./jwt-auth.guard");
+const dotenv = require("dotenv");
+dotenv.config();
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -24,7 +26,7 @@ exports.AuthModule = AuthModule = __decorate([
             users_module_1.UsersModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
-                secret: 'secretKey',
+                secret: process.env.JWT_SECRET,
                 signOptions: { expiresIn: '30d' },
             }),
         ],

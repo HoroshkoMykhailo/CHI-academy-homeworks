@@ -21,31 +21,30 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async login(loginDto, res) {
-        if (!loginDto.username || !loginDto.password) {
-            throw new common_1.BadRequestException('Данные указаны неверно');
-        }
+    async login(loginDto) {
         const user = await this.authService.validateUser(loginDto.username, loginDto.password);
+        if (!user) {
+            throw new common_1.UnauthorizedException('Incorrect username or password');
+        }
         const { access_token } = await this.authService.login(user);
-        const response = {
+        return {
             access_token,
             userName: loginDto.username,
             userRole: user.role,
             userId: user.id,
         };
-        return res.status(common_1.HttpStatus.OK).json(response);
     }
 };
 exports.AuthController = AuthController;
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'User login' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Успешная авторизация, возвращает JWT токен и имя пользователя' }),
-    (0, swagger_1.ApiResponse)({ status: 401, description: 'Неверное имя пользователя или пароль' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Successful authentication. Returns access token and user info' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Data is missing' }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Incorrect username or password' }),
     (0, common_1.Post)('login'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [login_dto_1.LoginDto, Object]),
+    __metadata("design:paramtypes", [login_dto_1.LoginDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 exports.AuthController = AuthController = __decorate([

@@ -33,10 +33,9 @@ let UsersService = class UsersService {
     }
     async create(username, password) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(`${password} hash: ${hashedPassword}`);
         const existingUser = await this.usersRepository.findOne({ where: { username } });
         if (existingUser) {
-            throw new common_1.BadRequestException('Пользователь с таким именем уже существует');
+            throw new common_1.BadRequestException('User with this username already exists');
         }
         const user = this.usersRepository.create({ username, password: hashedPassword });
         return this.usersRepository.save(user);

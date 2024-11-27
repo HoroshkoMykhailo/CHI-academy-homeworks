@@ -3,5 +3,10 @@ import { LoginDto } from './dto/login.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    login(loginDto: LoginDto, res: any): Promise<any>;
+    login(loginDto: LoginDto): Promise<{
+        access_token: string;
+        userName: string;
+        userRole: any;
+        userId: any;
+    }>;
 }

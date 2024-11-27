@@ -19,6 +19,7 @@ const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 const user_entity_1 = require("./user.entity");
 const create_user_dto_1 = require("./dto/create-user.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const MinLoginLength = 4;
 const MinPasswordLength = 4;
 let UsersController = class UsersController {
@@ -42,14 +43,11 @@ let UsersController = class UsersController {
         return (0, class_transformer_1.plainToInstance)(user_entity_1.User, users, { excludeExtraneousValues: true });
     }
     async register(createUserDto) {
-        if (!createUserDto.username ||
-            !createUserDto.password ||
-            createUserDto.username.length < MinLoginLength ||
-            createUserDto.password.length < MinPasswordLength) {
-            throw new common_1.BadRequestException(`Длинна пароля и логина должна быть не меньше ${MinLoginLength} символов`);
-        }
         const user = this.usersService.create(createUserDto.username, createUserDto.password);
         return (0, class_transformer_1.plainToInstance)(user_entity_1.User, user, { excludeExtraneousValues: true });
+    }
+    async getMyProfile(req) {
+        return (0, class_transformer_1.plainToInstance)(user_entity_1.User, req.user, { excludeExtraneousValues: true });
     }
 };
 exports.UsersController = UsersController;
@@ -68,18 +66,36 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUsers", null);
 __decorate([
-    (0, swagger_1.ApiOperation)({ summary: "Регистрация нового пользователя" }),
+    (0, swagger_1.ApiOperation)({ summary: "Registration of new user" }),
     (0, swagger_1.ApiResponse)({
         status: 201,
-        description: "Пользователь успешно зарегистрирован",
+        description: "User successfully registered",
     }),
-    (0, swagger_1.ApiResponse)({ status: 400, description: "Некорректные данные" }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: "Provided credentials are invalid" }),
     (0, common_1.Post)("register"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "register", null);
+__decorate([
+    (0, common_1.Get)('my-profile'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get current user information' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Current user information',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 401,
+        description: 'Unauthorized',
+    }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getMyProfile", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)("users"),
     __metadata("design:paramtypes", [users_service_1.UsersService])

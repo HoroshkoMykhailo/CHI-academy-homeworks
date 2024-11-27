@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 const MinLoginLength = 4;
 const MinPasswordLength = 4;
@@ -43,24 +44,14 @@ export class UsersController {
     return plainToInstance(User, users, { excludeExtraneousValues: true });
   }
 
-  @ApiOperation({ summary: "Регистрация нового пользователя" })
+  @ApiOperation({ summary: "Registration of new user" })
   @ApiResponse({
     status: 201,
-    description: "Пользователь успешно зарегистрирован",
+    description: "User successfully registered",
   })
-  @ApiResponse({ status: 400, description: "Некорректные данные" })
+  @ApiResponse({ status: 400, description: "Provided credentials are invalid" })
   @Post("register")
   async register(@Body() createUserDto: CreateUserDto) {
-    if (
-      !createUserDto.username ||
-      !createUserDto.password ||
-      createUserDto.username.length < MinLoginLength ||
-      createUserDto.password.length < MinPasswordLength
-    ) {
-      throw new BadRequestException(
-        `Длинна пароля и логина должна быть не меньше ${MinLoginLength} символов`
-      );
-    }
 
     const user = this.usersService.create(
       createUserDto.username,
@@ -69,4 +60,20 @@ export class UsersController {
 
     return plainToInstance(User, user, { excludeExtraneousValues: true });
   }
+
+  @Get('my-profile')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get current user information' })
+  @ApiResponse({
+    status: 200,
+    description: 'Current user information',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  async getMyProfile(@Request() req) {
+    return plainToInstance(User, req.user, { excludeExtraneousValues: true });
+   }
 }
