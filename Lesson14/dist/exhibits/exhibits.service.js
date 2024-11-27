@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const exhibit_entity_1 = require("./exhibit.entity");
+const uuid_1 = require("uuid");
+const fs = require("fs");
+const path = require("path");
 let ExhibitsService = class ExhibitsService {
     constructor(exhibitsRepository) {
         this.exhibitsRepository = exhibitsRepository;
@@ -30,6 +33,21 @@ let ExhibitsService = class ExhibitsService {
                 createdAt: 'DESC',
             }
         });
+    }
+    async createExhibit(file, description, userId) {
+        const uniqueFileName = `${(0, uuid_1.v4)()}${path.extname(file.originalname)}`;
+        const uploadFolder = path.join(__dirname, '../../static');
+        if (!fs.existsSync(uploadFolder)) {
+            fs.mkdirSync(uploadFolder, { recursive: true });
+        }
+        const filePath = path.join(uploadFolder, uniqueFileName);
+        fs.writeFileSync(filePath, file.buffer);
+        const exhibit = this.exhibitsRepository.create({
+            imageUrl: `/static/${uniqueFileName}`,
+            description,
+            userId,
+        });
+        return await this.exhibitsRepository.save(exhibit);
     }
 };
 exports.ExhibitsService = ExhibitsService;

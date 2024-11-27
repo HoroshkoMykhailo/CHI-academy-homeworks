@@ -7,4 +7,5 @@ export declare class ExhibitsService {
         page: number;
         limit: number;
     }): Promise<[Exhibit[], number]>;
+    createExhibit(file: Express.Multer.File, description: string, userId: number): Promise<Exhibit>;
 }

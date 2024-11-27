@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import * as express from 'express'
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +16,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   )
+
+  app.use('/static', express.static(join(__dirname, '..', 'static')));
   
   const config = new DocumentBuilder()
     .setTitle('Lesson14')

@@ -16,22 +16,38 @@ exports.ExhibitsController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const exhibits_service_1 = require("./exhibits.service");
+const platform_express_1 = require("@nestjs/platform-express");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const image_file_filter_1 = require("./filters/image-file.filter");
+const class_transformer_1 = require("class-transformer");
+const exhibit_entity_1 = require("./exhibit.entity");
 let ExhibitsController = class ExhibitsController {
     constructor(exhibitsService) {
         this.exhibitsService = exhibitsService;
     }
     async getExhibits(page = 1, limit = 10) {
-        console.log(page, limit);
-        const [exhibits, total] = await this.exhibitsService.getExhibits({ page, limit });
+        const [exhibits, total] = await this.exhibitsService.getExhibits({
+            page,
+            limit,
+        });
         if (!exhibits.length) {
             throw new common_1.NotFoundException("Exhibits not found");
         }
         return {
-            exhibits,
+            exhibits: (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibits, {
+                excludeExtraneousValues: true,
+            }),
             total,
             page,
             lastPage: Math.ceil(total / limit),
         };
+    }
+    async createExhibit({ description }, file, req) {
+        if (!file) {
+            throw new common_1.BadRequestException("Image is required");
+        }
+        const exhibit = await this.exhibitsService.createExhibit(file, description, req.user.id);
+        return (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibit, { excludeExtraneousValues: true });
     }
 };
 exports.ExhibitsController = ExhibitsController;
@@ -48,8 +64,37 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], ExhibitsController.prototype, "getExhibits", null);
+__decorate([
+    (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)("image", {
+        fileFilter: image_file_filter_1.imageFileFilter,
+    })),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)("access-token"),
+    (0, swagger_1.ApiOperation)({ summary: "New exhibit creation" }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: "Exhibit successfully created" }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: "Only images are allowed" }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: "Image is required" }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: "Unauthorized" }),
+    (0, swagger_1.ApiConsumes)("multipart/form-data"),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: "object",
+            properties: {
+                image: { type: "string", format: "binary" },
+                description: { type: "string", default: "" },
+            },
+        },
+    }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", Promise)
+], ExhibitsController.prototype, "createExhibit", null);
 exports.ExhibitsController = ExhibitsController = __decorate([
-    (0, common_1.Controller)('exhibits'),
+    (0, common_1.Controller)("exhibits"),
     __metadata("design:paramtypes", [exhibits_service_1.ExhibitsService])
 ], ExhibitsController);
 //# sourceMappingURL=exhibits.controller.js.map
