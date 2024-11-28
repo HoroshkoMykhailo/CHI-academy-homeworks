@@ -13,12 +13,13 @@ const exhibits_controller_1 = require("./exhibits.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const exhibit_entity_1 = require("./exhibit.entity");
 const user_entity_1 = require("../users/user.entity");
+const comment_entity_1 = require("../comments/comment.entity");
 let ExhibitsModule = class ExhibitsModule {
 };
 exports.ExhibitsModule = ExhibitsModule;
 exports.ExhibitsModule = ExhibitsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([exhibit_entity_1.Exhibit, user_entity_1.User])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([exhibit_entity_1.Exhibit, user_entity_1.User, comment_entity_1.Comment])],
         controllers: [exhibits_controller_1.ExhibitsController],
         exports: [exhibits_service_1.ExhibitsService],
         providers: [exhibits_service_1.ExhibitsService]

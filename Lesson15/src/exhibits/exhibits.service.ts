@@ -71,4 +71,15 @@ export class ExhibitsService {
 
     await this.exhibitsRepository.remove(exhibit);
   }
+
+  async changeCommentCount(exhibitId: number, delta: number): Promise<void> {
+    const exhibit = await this.exhibitsRepository.findOne({ where: { id: exhibitId } });
+
+    if (!exhibit) {
+      throw new Error('Exhibit not found');
+    }
+
+    exhibit.commentCount = Math.max(0, exhibit.commentCount + delta);
+    await this.exhibitsRepository.save(exhibit);
+  }
 }

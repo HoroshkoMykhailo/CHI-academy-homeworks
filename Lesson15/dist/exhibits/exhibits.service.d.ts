@@ -7,4 +7,5 @@ export declare class ExhibitsService {
     createExhibit(file: Express.Multer.File, description: string, userId: number): Promise<Exhibit>;
     getExhibitById(id: number): Promise<Exhibit | null>;
     deleteExhibitById(id: number, userId: number): Promise<void>;
+    changeCommentCount(exhibitId: number, delta: number): Promise<void>;
 }

@@ -63,6 +63,14 @@ let ExhibitsService = class ExhibitsService {
         }
         await this.exhibitsRepository.remove(exhibit);
     }
+    async changeCommentCount(exhibitId, delta) {
+        const exhibit = await this.exhibitsRepository.findOne({ where: { id: exhibitId } });
+        if (!exhibit) {
+            throw new Error('Exhibit not found');
+        }
+        exhibit.commentCount = Math.max(0, exhibit.commentCount + delta);
+        await this.exhibitsRepository.save(exhibit);
+    }
 };
 exports.ExhibitsService = ExhibitsService;
 exports.ExhibitsService = ExhibitsService = __decorate([

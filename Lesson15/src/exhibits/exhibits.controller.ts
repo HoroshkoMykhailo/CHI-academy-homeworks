@@ -37,7 +37,6 @@ export class ExhibitsController {
   @ApiQuery({ name: "page", required: false, description: "Page number" })
   @ApiQuery({ name: "limit", required: false, description: "Items per page" })
   @ApiResponse({ status: 200, description: "Successful response" })
-  @ApiResponse({ status: 404, description: "Exhibits not found" })
   async getExhibits(
     @Query("page") page: number = 1,
     @Query("limit") limit: number = 10
@@ -46,10 +45,6 @@ export class ExhibitsController {
       page,
       limit,
     );
-
-    if (!exhibits.length) {
-      throw new NotFoundException("Exhibits not found");
-    }
 
     return {
       exhibits: plainToInstance(Exhibit, exhibits, {
@@ -126,17 +121,12 @@ export class ExhibitsController {
   @ApiQuery({ name: "limit", required: false, description: "Items per page" })
   @ApiResponse({ status: 200, description: "Successful response" })
   @ApiResponse({ status: 401, description: "Unauthorized" })
-  @ApiResponse({ status: 404, description: "Exhibits not found" })
   async getMyExhibits(
     @Query("page") page: number = 1,
     @Query("limit") limit: number = 10,
     @Request() req
   ) {
     const [exhibits, total] = await this.exhibitsService.getExhibitsWithPagination(page, limit, { userId: req.user.id });
-
-    if (!exhibits.length) {
-      throw new NotFoundException("Exhibits not found");
-    }
 
     return {
       exhibits: plainToInstance(Exhibit, exhibits, {

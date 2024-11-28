@@ -19,7 +19,6 @@ export class UsersController {
   @ApiQuery({ name: "username", required: false, description: "Username" })
   @ApiResponse({ status: 200, description: "Successful response" })
   @ApiResponse({ status: 404, description: "User not found" })
-  @ApiResponse({ status: 404, description: "There are no users" })
   async getUsers(
     @Query("id") id?: number,
     @Query("username") username?: string
@@ -37,9 +36,6 @@ export class UsersController {
     }
 
     const users = await this.usersService.findAll();
-    if (!users || users.length === 0) {
-      throw new NotFoundException("There are no users");
-    }
 
     return plainToInstance(User, users, { excludeExtraneousValues: true });
   }

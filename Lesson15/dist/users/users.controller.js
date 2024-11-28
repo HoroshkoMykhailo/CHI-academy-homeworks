@@ -37,9 +37,6 @@ let UsersController = class UsersController {
             return (0, class_transformer_1.plainToInstance)(user_entity_1.User, user, { excludeExtraneousValues: true });
         }
         const users = await this.usersService.findAll();
-        if (!users || users.length === 0) {
-            throw new common_1.NotFoundException("There are no users");
-        }
         return (0, class_transformer_1.plainToInstance)(user_entity_1.User, users, { excludeExtraneousValues: true });
     }
     async register(createUserDto) {
@@ -58,7 +55,6 @@ __decorate([
     (0, swagger_1.ApiQuery)({ name: "username", required: false, description: "Username" }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Successful response" }),
     (0, swagger_1.ApiResponse)({ status: 404, description: "User not found" }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: "There are no users" }),
     __param(0, (0, common_1.Query)("id")),
     __param(1, (0, common_1.Query)("username")),
     __metadata("design:type", Function),

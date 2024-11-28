@@ -21,7 +21,7 @@ async function bootstrap() {
   
   const config = new DocumentBuilder()
     .setTitle('Lesson14')
-    .setDescription('API description')
+    .setDescription('API for managing museum exhibitions')
     .setVersion('1.0')
     .addBearerAuth(
       {

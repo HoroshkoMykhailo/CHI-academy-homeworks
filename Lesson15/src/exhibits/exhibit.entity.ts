@@ -45,11 +45,10 @@ export class Exhibit {
   comments: Comment[];
 
   @Expose()
+  @Column({ default: 0 })
   @ApiProperty({
     example: 5,
     description: "Number of comments for the exhibit",
   })
-  get commentCount(): number {
-    return this.comments ? this.comments.length : 0;
-  }
+  commentCount: number 
 }

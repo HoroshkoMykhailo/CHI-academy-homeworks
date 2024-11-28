@@ -8,5 +8,5 @@ export declare class Exhibit {
     userId: number;
     createdAt: Date;
     comments: Comment[];
-    get commentCount(): number;
+    commentCount: number;
 }

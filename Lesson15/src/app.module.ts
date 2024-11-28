@@ -4,8 +4,6 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { dbconfig } from './db.config';
 import { ExhibitsModule } from './exhibits/exhibits.module';
-import { CommentsController } from './comments/comments.controller';
-import { CommentsService } from './comments/comments.service';
 import { CommentsModule } from './comments/comments.module';
 
 @Module({

@@ -16,8 +16,8 @@ async function bootstrap() {
     }));
     app.use('/static', express.static((0, path_1.join)(__dirname, '..', 'static')));
     const config = new swagger_1.DocumentBuilder()
-        .setTitle('Lesson14')
-        .setDescription('API description')
+        .setTitle('Lesson15')
+        .setDescription('API for managing museum exhibits')
         .setVersion('1.0')
         .addBearerAuth({
         type: 'http',

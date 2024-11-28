@@ -16,9 +16,6 @@ const class_transformer_1 = require("class-transformer");
 const user_entity_1 = require("../users/user.entity");
 const comment_entity_1 = require("../comments/comment.entity");
 let Exhibit = class Exhibit {
-    get commentCount() {
-        return this.comments ? this.comments.length : 0;
-    }
 };
 exports.Exhibit = Exhibit;
 __decorate([
@@ -68,13 +65,13 @@ __decorate([
 ], Exhibit.prototype, "comments", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
+    (0, typeorm_1.Column)({ default: 0 }),
     (0, swagger_1.ApiProperty)({
         example: 5,
         description: "Number of comments for the exhibit",
     }),
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [])
-], Exhibit.prototype, "commentCount", null);
+    __metadata("design:type", Number)
+], Exhibit.prototype, "commentCount", void 0);
 exports.Exhibit = Exhibit = __decorate([
     (0, typeorm_1.Entity)()
 ], Exhibit);

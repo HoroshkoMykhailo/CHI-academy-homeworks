@@ -27,9 +27,6 @@ let ExhibitsController = class ExhibitsController {
     }
     async getExhibits(page = 1, limit = 10) {
         const [exhibits, total] = await this.exhibitsService.getExhibitsWithPagination(page, limit);
-        if (!exhibits.length) {
-            throw new common_1.NotFoundException("Exhibits not found");
-        }
         return {
             exhibits: (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibits, {
                 excludeExtraneousValues: true,
@@ -55,9 +52,6 @@ let ExhibitsController = class ExhibitsController {
     }
     async getMyExhibits(page = 1, limit = 10, req) {
         const [exhibits, total] = await this.exhibitsService.getExhibitsWithPagination(page, limit, { userId: req.user.id });
-        if (!exhibits.length) {
-            throw new common_1.NotFoundException("Exhibits not found");
-        }
         return {
             exhibits: (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibits, {
                 excludeExtraneousValues: true,
@@ -79,7 +73,6 @@ __decorate([
     (0, swagger_1.ApiQuery)({ name: "page", required: false, description: "Page number" }),
     (0, swagger_1.ApiQuery)({ name: "limit", required: false, description: "Items per page" }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Successful response" }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: "Exhibits not found" }),
     __param(0, (0, common_1.Query)("page")),
     __param(1, (0, common_1.Query)("limit")),
     __metadata("design:type", Function),
@@ -134,7 +127,6 @@ __decorate([
     (0, swagger_1.ApiQuery)({ name: "limit", required: false, description: "Items per page" }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Successful response" }),
     (0, swagger_1.ApiResponse)({ status: 401, description: "Unauthorized" }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: "Exhibits not found" }),
     __param(0, (0, common_1.Query)("page")),
     __param(1, (0, common_1.Query)("limit")),
     __param(2, (0, common_1.Request)()),
