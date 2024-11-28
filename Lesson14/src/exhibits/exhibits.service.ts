@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Exhibit } from './exhibit.entity';
@@ -35,6 +35,10 @@ export class ExhibitsService {
     description: string,
     userId: number
   ): Promise<Exhibit> {
+    if(!file) {
+      throw new BadRequestException("Image is required");
+    }
+    
     const uniqueFileName = `${uuidv4()}${path.extname(file.originalname)}`;
     const uploadFolder = path.join(__dirname, "../../static");
 
@@ -55,7 +59,13 @@ export class ExhibitsService {
   }
 
   async getExhibitById(id: number): Promise<Exhibit | null> {
-    return await this.exhibitsRepository.findOneBy({ id });
+    const exhibit = await this.exhibitsRepository.findOneBy({ id });
+
+    if (!exhibit) {
+      throw new NotFoundException("Exhibit not found");
+    }
+
+    return exhibit;
   }
 
   async deleteExhibitById(id: number, userId: number): Promise<void> {

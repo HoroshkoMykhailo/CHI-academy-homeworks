@@ -26,10 +26,18 @@ let UsersService = class UsersService {
         return this.usersRepository.find();
     }
     async findByUsername(username) {
-        return this.usersRepository.findOne({ where: { username } });
+        const user = this.usersRepository.findOne({ where: { username } });
+        if (!user) {
+            throw new common_1.BadRequestException('User not found');
+        }
+        return user;
     }
     async findById(id) {
-        return this.usersRepository.findOne({ where: { id } });
+        const user = this.usersRepository.findOne({ where: { id } });
+        if (!user) {
+            throw new common_1.BadRequestException('User not found');
+        }
+        return user;
     }
     async create(username, password) {
         const hashedPassword = await bcrypt.hash(password, 10);

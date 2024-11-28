@@ -28,10 +28,6 @@ export class UsersController {
         ? await this.usersService.findById(id)
         : await this.usersService.findByUsername(username);
 
-      if (!user) {
-        throw new NotFoundException("User not found");
-      }
-
       return plainToInstance(User, user, { excludeExtraneousValues: true });
     }
 

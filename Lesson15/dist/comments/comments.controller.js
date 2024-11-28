@@ -16,31 +16,20 @@ exports.CommentsController = void 0;
 const common_1 = require("@nestjs/common");
 const comments_service_1 = require("./comments.service");
 const swagger_1 = require("@nestjs/swagger");
-const exhibits_service_1 = require("../exhibits/exhibits.service");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const create_comment_dto_1 = require("./dto/create-comment.dto");
 const class_transformer_1 = require("class-transformer");
 const comment_entity_1 = require("./comment.entity");
 let CommentsController = class CommentsController {
-    constructor(commentsService, exhibitService) {
+    constructor(commentsService) {
         this.commentsService = commentsService;
-        this.exhibitService = exhibitService;
     }
     async getComments(exhibitId) {
-        const exhibit = await this.exhibitService.getExhibitById(exhibitId);
-        if (!exhibit) {
-            throw new common_1.NotFoundException("Exhibit not found");
-        }
         const comments = await this.commentsService.getComments(exhibitId);
         return (0, class_transformer_1.plainToInstance)(comment_entity_1.Comment, comments, { excludeExtraneousValues: true });
     }
     async createComment(exhibitId, CreateCommentDto, req) {
-        const exhibit = await this.exhibitService.getExhibitById(exhibitId);
-        if (!exhibit) {
-            throw new common_1.NotFoundException("Exhibit not found");
-        }
         const comment = this.commentsService.createComment(CreateCommentDto.text, exhibitId, req.user.id);
-        await this.exhibitService.changeCommentCount(exhibitId, 1);
         return (0, class_transformer_1.plainToInstance)(comment_entity_1.Comment, comment, { excludeExtraneousValues: true });
     }
     async deleteComment(commentId, req) {
@@ -50,7 +39,7 @@ let CommentsController = class CommentsController {
 };
 exports.CommentsController = CommentsController;
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)(":exhibitId"),
     (0, swagger_1.ApiOperation)({ summary: "Get all comments for an exhibit" }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Successfull response" }),
     (0, swagger_1.ApiResponse)({ status: 404, description: "Exhibit not found" }),
@@ -60,7 +49,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CommentsController.prototype, "getComments", null);
 __decorate([
-    (0, common_1.Post)(),
+    (0, common_1.Post)(":exhibitId"),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)("access-token"),
     (0, swagger_1.ApiOperation)({ summary: "Create a new comment for an exhibit" }),
@@ -90,9 +79,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CommentsController.prototype, "deleteComment", null);
 exports.CommentsController = CommentsController = __decorate([
-    (0, swagger_1.ApiTags)("Comments"),
-    (0, common_1.Controller)("exhibits/:exhibitId/comments"),
-    __metadata("design:paramtypes", [comments_service_1.CommentsService,
-        exhibits_service_1.ExhibitsService])
+    (0, common_1.Controller)("comments"),
+    __metadata("design:paramtypes", [comments_service_1.CommentsService])
 ], CommentsController);
 //# sourceMappingURL=comments.controller.js.map

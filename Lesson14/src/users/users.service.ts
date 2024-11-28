@@ -16,11 +16,23 @@ export class UsersService {
     }
 
     async findByUsername(username: string): Promise<User | undefined> {
-        return this.usersRepository.findOne({ where: { username } });
+        const user = this.usersRepository.findOne({ where: { username } });
+
+        if(!user) {
+            throw new BadRequestException('User not found');
+        }
+
+        return user;
     }
 
     async findById(id: number): Promise<User | undefined> {
-        return this.usersRepository.findOne({ where: { id } });
+        const user = this.usersRepository.findOne({ where: { id } });
+
+        if (!user) {
+            throw new BadRequestException('User not found');
+        }
+
+        return user;
     }
 
     async create(username: string, password: string): Promise<User> {

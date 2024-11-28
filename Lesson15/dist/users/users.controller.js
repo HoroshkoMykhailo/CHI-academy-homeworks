@@ -31,9 +31,6 @@ let UsersController = class UsersController {
             const user = id
                 ? await this.usersService.findById(id)
                 : await this.usersService.findByUsername(username);
-            if (!user) {
-                throw new common_1.NotFoundException("User not found");
-            }
             return (0, class_transformer_1.plainToInstance)(user_entity_1.User, user, { excludeExtraneousValues: true });
         }
         const users = await this.usersService.findAll();

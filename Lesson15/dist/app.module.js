@@ -14,6 +14,7 @@ const auth_module_1 = require("./auth/auth.module");
 const db_config_1 = require("./db.config");
 const exhibits_module_1 = require("./exhibits/exhibits.module");
 const comments_module_1 = require("./comments/comments.module");
+const notifications_gateway_1 = require("./notifications/notifications.gateway");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,7 +29,8 @@ exports.AppModule = AppModule = __decorate([
             users_module_1.UsersModule,
             exhibits_module_1.ExhibitsModule,
             comments_module_1.CommentsModule
-        ]
+        ],
+        providers: [notifications_gateway_1.NotificationsGateway]
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

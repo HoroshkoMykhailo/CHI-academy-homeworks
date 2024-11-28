@@ -14,6 +14,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const exhibit_entity_1 = require("./exhibit.entity");
 const user_entity_1 = require("../users/user.entity");
 const comment_entity_1 = require("../comments/comment.entity");
+const notifications_gateway_1 = require("../notifications/notifications.gateway");
 let ExhibitsModule = class ExhibitsModule {
 };
 exports.ExhibitsModule = ExhibitsModule;
@@ -22,7 +23,7 @@ exports.ExhibitsModule = ExhibitsModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([exhibit_entity_1.Exhibit, user_entity_1.User, comment_entity_1.Comment])],
         controllers: [exhibits_controller_1.ExhibitsController],
         exports: [exhibits_service_1.ExhibitsService],
-        providers: [exhibits_service_1.ExhibitsService]
+        providers: [exhibits_service_1.ExhibitsService, notifications_gateway_1.NotificationsGateway]
     })
 ], ExhibitsModule);
 //# sourceMappingURL=exhibits.module.js.map

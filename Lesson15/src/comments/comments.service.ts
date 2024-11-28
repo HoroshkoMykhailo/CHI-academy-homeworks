@@ -13,6 +13,8 @@ export class CommentsService {
   ) {}
 
   async getComments(exhibitId: number): Promise<Comment[]> {
+
+    await this.exhibitsService.getExhibitById(exhibitId);
     return this.commentsRepository.find({
       where: { exhibitId },
       order: {
@@ -22,6 +24,7 @@ export class CommentsService {
   }
 
   async createComment(text: string, exhibitId: number, userId: number): Promise<Comment> {
+    await this.exhibitsService.getExhibitById(exhibitId);
 
     const newComment = this.commentsRepository.create({
       text,
@@ -29,6 +32,7 @@ export class CommentsService {
       userId,
     });
 
+    await this.exhibitsService.changeCommentCount(exhibitId, 1);
     return this.commentsRepository.save(newComment);
   }
 

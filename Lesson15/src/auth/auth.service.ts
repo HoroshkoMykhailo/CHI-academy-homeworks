@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/user.entity';
 import * as bcrypt from 'bcrypt';
+import e from 'express';
 
 @Injectable()
 export class AuthService {
@@ -22,8 +23,8 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-
-    return null;
+    
+    throw new UnauthorizedException('Incorrect username or password');
   }
 
   async login(user: User) {

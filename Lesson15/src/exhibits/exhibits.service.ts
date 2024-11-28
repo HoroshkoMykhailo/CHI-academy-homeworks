@@ -1,16 +1,19 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Exhibit } from './exhibit.entity';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 import * as path from 'path';
+import { NotificationsGateway } from '../notifications/notifications.gateway';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class ExhibitsService {
   constructor(
     @InjectRepository(Exhibit)
-    private readonly exhibitsRepository: Repository<Exhibit>
+    private readonly exhibitsRepository: Repository<Exhibit>,
+    private readonly notificationsService: NotificationsGateway
   ) {}
 
   async getExhibitsWithPagination(
@@ -33,8 +36,13 @@ export class ExhibitsService {
   async createExhibit(
     file: Express.Multer.File,
     description: string,
-    userId: number
+    user: User
   ): Promise<Exhibit> {
+
+    if(!file) {
+      throw new BadRequestException("Image is required");
+    }
+    
     const uniqueFileName = `${uuidv4()}${path.extname(file.originalname)}`;
     const uploadFolder = path.join(__dirname, "../../static");
 
@@ -48,14 +56,22 @@ export class ExhibitsService {
     const exhibit = this.exhibitsRepository.create({
       imageUrl: `/static/${uniqueFileName}`,
       description,
-      userId,
+      userId: user.id,
     });
+
+    this.notificationsService.handleNewExhibit({ message: "New exhibit created", user: user.username });
 
     return await this.exhibitsRepository.save(exhibit);
   }
 
   async getExhibitById(id: number): Promise<Exhibit | null> {
-    return await this.exhibitsRepository.findOneBy({ id });
+    const exhibit = await this.exhibitsRepository.findOneBy({ id });
+
+    if (!exhibit) {
+      throw new NotFoundException("Exhibit not found");
+    }
+
+    return exhibit;
   }
 
   async deleteExhibitById(id: number, userId: number): Promise<void> {

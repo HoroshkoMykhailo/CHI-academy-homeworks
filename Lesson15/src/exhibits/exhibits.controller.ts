@@ -86,14 +86,10 @@ export class ExhibitsController {
     @UploadedFile() file: Express.Multer.File,
     @Request() req
   ) {
-    if (!file) {
-      throw new BadRequestException("Image is required");
-    }
-
     const exhibit = await this.exhibitsService.createExhibit(
       file,
       description,
-      req.user.id
+      req.user
     );
 
     return plainToInstance(Exhibit, exhibit, { excludeExtraneousValues: true });
@@ -105,10 +101,6 @@ export class ExhibitsController {
   @ApiResponse({ status: 404, description: "Exhibit not found" })
   async getExhibitById(@Param("id") id: number) {
     const exhibit = await this.exhibitsService.getExhibitById(id);
-
-    if (!exhibit) {
-      throw new NotFoundException("Exhibit not found");
-    }
 
     return plainToInstance(Exhibit, exhibit, { excludeExtraneousValues: true });
   }

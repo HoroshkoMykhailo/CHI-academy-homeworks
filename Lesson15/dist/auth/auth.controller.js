@@ -23,9 +23,6 @@ let AuthController = class AuthController {
     }
     async login(loginDto) {
         const user = await this.authService.validateUser(loginDto.username, loginDto.password);
-        if (!user) {
-            throw new common_1.UnauthorizedException('Incorrect username or password');
-        }
         const { access_token } = await this.authService.login(user);
         return {
             access_token,

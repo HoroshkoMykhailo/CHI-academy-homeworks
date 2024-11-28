@@ -28,7 +28,7 @@ let AuthService = class AuthService {
             const { password, ...result } = user;
             return result;
         }
-        return null;
+        throw new common_1.UnauthorizedException('Incorrect username or password');
     }
     async login(user) {
         const payload = { username: user.username, sub: user.id };

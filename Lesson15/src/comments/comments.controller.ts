@@ -7,31 +7,23 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { plainToInstance } from 'class-transformer';
 import { Comment } from './comment.entity';
 
-@ApiTags("Comments")
-@Controller("exhibits/:exhibitId/comments")
+@Controller("comments")
 export class CommentsController {
   constructor(
     private readonly commentsService: CommentsService,
-    private readonly exhibitService: ExhibitsService
   ) {}
 
-  @Get()
+  @Get(":exhibitId")
   @ApiOperation({ summary: "Get all comments for an exhibit" })
   @ApiResponse({ status: 200, description: "Successfull response" })
   @ApiResponse({ status: 404, description: "Exhibit not found" })
   async getComments(@Param("exhibitId") exhibitId: number) {
-    const exhibit = await this.exhibitService.getExhibitById(exhibitId);
-
-    if (!exhibit) {
-      throw new NotFoundException("Exhibit not found");
-    }
-
     const comments = await this.commentsService.getComments(exhibitId);
 
     return plainToInstance(Comment, comments, { excludeExtraneousValues: true });
   }
 
-  @Post()
+  @Post(":exhibitId")
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth("access-token")
   @ApiOperation({ summary: "Create a new comment for an exhibit" })
@@ -43,15 +35,7 @@ export class CommentsController {
     @Body() CreateCommentDto: CreateCommentDto,
     @Request() req
   ) {
-    const exhibit = await this.exhibitService.getExhibitById(exhibitId);
-
-    if (!exhibit) {
-      throw new NotFoundException("Exhibit not found");
-    }
-
     const comment = this.commentsService.createComment(CreateCommentDto.text, exhibitId, req.user.id);
-
-    await this.exhibitService.changeCommentCount(exhibitId, 1);
 
     return plainToInstance(Comment, comment, { excludeExtraneousValues: true });
   }

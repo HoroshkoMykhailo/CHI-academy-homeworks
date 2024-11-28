@@ -24,6 +24,7 @@ let CommentsService = class CommentsService {
         this.exhibitsService = exhibitsService;
     }
     async getComments(exhibitId) {
+        await this.exhibitsService.getExhibitById(exhibitId);
         return this.commentsRepository.find({
             where: { exhibitId },
             order: {
@@ -32,11 +33,13 @@ let CommentsService = class CommentsService {
         });
     }
     async createComment(text, exhibitId, userId) {
+        await this.exhibitsService.getExhibitById(exhibitId);
         const newComment = this.commentsRepository.create({
             text,
             exhibitId,
             userId,
         });
+        await this.exhibitsService.changeCommentCount(exhibitId, 1);
         return this.commentsRepository.save(newComment);
     }
     async deleteComment(commentId, userId) {

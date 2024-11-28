@@ -20,9 +20,11 @@ const exhibit_entity_1 = require("./exhibit.entity");
 const uuid_1 = require("uuid");
 const fs = require("fs");
 const path = require("path");
+const notifications_gateway_1 = require("../notifications/notifications.gateway");
 let ExhibitsService = class ExhibitsService {
-    constructor(exhibitsRepository) {
+    constructor(exhibitsRepository, notificationsService) {
         this.exhibitsRepository = exhibitsRepository;
+        this.notificationsService = notificationsService;
     }
     async getExhibitsWithPagination(page, limit, where = {}) {
         const skip = (page - 1) * limit;
@@ -35,7 +37,10 @@ let ExhibitsService = class ExhibitsService {
             },
         });
     }
-    async createExhibit(file, description, userId) {
+    async createExhibit(file, description, user) {
+        if (!file) {
+            throw new common_1.BadRequestException("Image is required");
+        }
         const uniqueFileName = `${(0, uuid_1.v4)()}${path.extname(file.originalname)}`;
         const uploadFolder = path.join(__dirname, "../../static");
         if (!fs.existsSync(uploadFolder)) {
@@ -46,12 +51,17 @@ let ExhibitsService = class ExhibitsService {
         const exhibit = this.exhibitsRepository.create({
             imageUrl: `/static/${uniqueFileName}`,
             description,
-            userId,
+            userId: user.id,
         });
+        this.notificationsService.handleNewExhibit({ message: "New exhibit created", user: user.username });
         return await this.exhibitsRepository.save(exhibit);
     }
     async getExhibitById(id) {
-        return await this.exhibitsRepository.findOneBy({ id });
+        const exhibit = await this.exhibitsRepository.findOneBy({ id });
+        if (!exhibit) {
+            throw new common_1.NotFoundException("Exhibit not found");
+        }
+        return exhibit;
     }
     async deleteExhibitById(id, userId) {
         const exhibit = await this.exhibitsRepository.findOne({ where: { id } });
@@ -76,6 +86,7 @@ exports.ExhibitsService = ExhibitsService;
 exports.ExhibitsService = ExhibitsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(exhibit_entity_1.Exhibit)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        notifications_gateway_1.NotificationsGateway])
 ], ExhibitsService);
 //# sourceMappingURL=exhibits.service.js.map

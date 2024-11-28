@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { dbconfig } from './db.config';
 import { ExhibitsModule } from './exhibits/exhibits.module';
 import { CommentsModule } from './comments/comments.module';
+import { NotificationsGateway } from './notifications/notifications.gateway';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CommentsModule } from './comments/comments.module';
     UsersModule,
     ExhibitsModule,
     CommentsModule
-  ]
+  ],
+  providers: [NotificationsGateway]
 })
 export class AppModule { }

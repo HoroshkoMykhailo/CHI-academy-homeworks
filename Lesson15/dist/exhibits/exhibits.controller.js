@@ -37,17 +37,11 @@ let ExhibitsController = class ExhibitsController {
         };
     }
     async createExhibit({ description }, file, req) {
-        if (!file) {
-            throw new common_1.BadRequestException("Image is required");
-        }
-        const exhibit = await this.exhibitsService.createExhibit(file, description, req.user.id);
+        const exhibit = await this.exhibitsService.createExhibit(file, description, req.user);
         return (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibit, { excludeExtraneousValues: true });
     }
     async getExhibitById(id) {
         const exhibit = await this.exhibitsService.getExhibitById(id);
-        if (!exhibit) {
-            throw new common_1.NotFoundException("Exhibit not found");
-        }
         return (0, class_transformer_1.plainToInstance)(exhibit_entity_1.Exhibit, exhibit, { excludeExtraneousValues: true });
     }
     async getMyExhibits(page = 1, limit = 10, req) {
