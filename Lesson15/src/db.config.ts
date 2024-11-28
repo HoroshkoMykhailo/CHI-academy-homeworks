@@ -1,5 +1,6 @@
 import { Exhibit } from "./exhibits/exhibit.entity";
 import { User } from "./users/user.entity";
+import { Comment } from "./comments/comment.entity";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -12,5 +13,5 @@ export const dbconfig = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     synchronize: process.env.DB_SYNCHRONIZE === "true",
-    entities: [User, Exhibit],
+    entities: [User, Exhibit, Comment],
 }

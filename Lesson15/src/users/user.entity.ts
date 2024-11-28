@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { Exhibit } from '../exhibits/exhibit.entity';
+import { Comment } from '../comments/comment.entity';
 
 @Entity()
 export class User {
@@ -25,4 +26,8 @@ export class User {
   @OneToMany(() => Exhibit, (exhibit) => exhibit.user, { cascade: true })
   @ApiProperty({ type: () => [Exhibit], description: 'List of exhibits, created by user' })
   exhibits: Exhibit[];
+
+  @OneToMany(() => Comment, (comment) => comment.user, { cascade: true })
+  @ApiProperty({ type: () => [Comment], description: 'List of comments made by the user' })
+  comments: Comment[];
 }

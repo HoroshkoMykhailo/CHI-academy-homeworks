@@ -10,6 +10,8 @@ async function bootstrap() {
 
   app.enableCors();
 
+  app.setGlobalPrefix('api');
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,8 +22,8 @@ async function bootstrap() {
   app.use('/static', express.static(join(__dirname, '..', 'static')));
   
   const config = new DocumentBuilder()
-    .setTitle('Lesson14')
-    .setDescription('API description')
+    .setTitle('Lesson15')
+    .setDescription('API for managing museum exhibits')
     .setVersion('1.0')
     .addBearerAuth(
       {
